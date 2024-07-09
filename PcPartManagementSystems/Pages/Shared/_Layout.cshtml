@@ -1,0 +1,163 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - @bl.refs.ProjectName</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"  asp-append-version="true"/>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-utilities.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/datatable/dataTables.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/datatable-bootstrap/dataTables.bootstrap5.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/select2-bootstrap/select2-bootstrap.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/select2/select2.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/owl-carousel/owl.carousel.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/coreui/coreui.min.css" asp-append-version="true" />
+    <link rel="stylesheet"href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" asp-append-version="true">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+ 
+
+    <style>
+        #dvLoading {
+            display: none; 
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%); 
+            width: 100px;
+            height: 100px; 
+            text-align: center; 
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000; 
+        }
+
+        #dvLoading img {
+            max-width: 300%; 
+            max-height: 300%;
+            display: block; 
+            margin: auto; 
+        }
+
+    </style>
+</head>
+<body>
+   
+    <div class="main_container">
+
+        @*--------------- Sidebar -------------*@
+        <div class="sidebar border-end fixed_column1">
+            <div class="sidebar-header border-bottom text-center">
+                <div class="sidebar-brand ">PC Part Management Systems</div>
+            </div>
+            <ul class="sidebar-nav">
+                <li class="nav-title">Main navbar</li>
+                <li class="nav-item">
+                    <a class="nav-link text-black" asp-area="" asp-page="/PCPMS/Dashboard/Index" onclick="return BtnClick()">
+                        <i class="nav-icon bx bxs-dashboard"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-black" href="#">
+                        <i class="nav-icon bx bxs-dashboard"></i> With badge
+         @*                <span class="badge bg-primary ms-auto">NEW</span> *@
+                    </a>
+                </li>
+                <li class="nav-item nav-group">
+                    <a class="nav-link nav-group-toggle text-black">
+                        <i class="nav-icon bx bxs-dashboard"></i> Nav dropdown
+                    </a>
+                    <ul class="nav-group-items">
+                        <li class="nav-item">
+                            <a class="nav-link text-black" href="#">
+                                <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Nav dropdown item
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-black" href="#">
+                                <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Nav dropdown item
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item nav-group">
+                    <a class="nav-link nav-group-toggle text-black">
+                        <i class="nav-icon bx bxs-dashboard"></i> Nav dropdown
+                    </a>
+                    <ul class="nav-group-items">
+                        <li class="nav-item">
+                            <a class="nav-link text-black" href="#">
+                                <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Nav dropdown item
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-black" href="#">
+                                <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Nav dropdown item
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="sidebar-footer border-top d-flex">
+                <button class="sidebar-toggler" type="button"></button>
+            </div>
+        </div>
+
+        <div class="fixed_column2">
+            @*-------- navbar ----------------*@
+            <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
+                <div class="container-fluid">
+                    <div class="hamburger_menu">
+                        <i class='text-black bx bx-menu'></i>
+                    </div>
+                    <div class="bg-transparent dropdown navbar-nav ms-auto m-0 pe-3">
+                        <a class="btn-dropdown text-black" data-coreui-toggle="dropdown" aria-expanded="false">
+                            <i class='bx bx-user-circle'></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Logout</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="body flex-grow-1">
+                <main role="main">
+
+                    <div id="dvLoading">
+                        <img src="~/img/LoadLogo.jpg" alt="Alternate Text" />
+                    </div>
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="~/lib/jquery/jquery-3.7.1.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-ui/jquery-ui.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap-5-3-0.js" asp-append-version="true"></script>
+    <script src="~/lib/select2/select2.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatable/dataTables.min.js" asp-append-version="true"></script>
+    <script src="~/lib/datatable-bootstrap/dataTables.bootstrap5.js" asp-append-version="true"></script>
+    <script src="~/lib/owl-carousel/owl.carousel.min.js" asp-append-version="true"></script>
+    <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/coreui/coreui.bundle.min.js" asp-append-version="true"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+
+    <script type="text/javascript">
+
+
+     
+
+     </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
