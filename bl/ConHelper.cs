@@ -48,12 +48,13 @@ namespace bl
             ConfigValue config = EComDB();
 
             // Construct and return the connection string using retrieved configuration
-            string connectionString =
-                  $@"Server={config.DBSERVER}; 
-                  Database={config.DBNAME}; 
-                  User={config.DBUSER}; 
-                  Password={config.DBPASS};
-                  TrustServerCertificate=True;";
+            string connectionString = $@"
+                Server={config.DBSERVER};
+                Database={config.DBNAME};
+                User={config.DBUSER};
+                Password={config.DBPASS};
+                TrustServerCertificate=True;";
+
 
             return connectionString;
         }

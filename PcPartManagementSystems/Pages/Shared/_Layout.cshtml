@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-grid.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-utilities.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/lib/datatable/dataTables.min.css" asp-append-version="true" />
+
     <link rel="stylesheet" href="~/lib/datatable-bootstrap/dataTables.bootstrap5.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/select2-bootstrap/select2-bootstrap.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css" asp-append-version="true" />
@@ -44,12 +44,21 @@
             margin: auto; 
         }
 
+        .Topbar {
+            text-align: right;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            padding-right: 15px; 
+            border-bottom: 1px solid #03030364;
+
+        }
+
     </style>
 </head>
 <body>
    
     <div class="main_container">
-
+  
         @*--------------- Sidebar -------------*@
         <div class="sidebar border-end fixed_column1">
             <div class="sidebar-header border-bottom text-center">
@@ -126,7 +135,11 @@
                     </div>
                 </div>
             </nav>
+            <div class="pt-2 Topbar">
+                @await RenderSectionAsync("Topbar", required: false)
+            </div>
             <div class="body flex-grow-1">
+              
                 <main role="main">
 
                     @* // Loading/ *@

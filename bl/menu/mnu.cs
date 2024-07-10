@@ -22,6 +22,9 @@
         public static string Menu_Name_Re_02 = "RMN02";
         public static string Menu_Name_Re_03 = "RMN03";
 
+
+
+
         List<bl.menu.mnu.Menu> mnuMenu = new List<bl.menu.mnu.Menu>
         {
             new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Dashboard, Name = bl.menu.mnu.Menu_Name_Dashboard, Url = "/PCPMS/Dashboard/Index"},

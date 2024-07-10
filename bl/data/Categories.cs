@@ -2,17 +2,19 @@
 {
     public class Categories
     {
-        // SQL query string to select all categories' Id and CategoryName from pcpms_categories table
-        public static string sqlSelectAll = $@"
-                            SELECT
-                                Id
-                                ,CategoiesName
-                            FROM {bl.refs.Databse_DB}.dbo.pcpms_categories";
+
 
         // Executes a SQL query asynchronously and maps the results to a list of Category objects
-        public static async Task<List<bl.model.Categories>> ExecuteQueryAsync(string sql)
+        public static async Task<List<bl.model.Categories>> ExecuteQueryAsync()
         {
-            var ret = await bl.DBaccess.RawSqlQueryAsync(sql, x => new bl.model.Categories
+             // SQL query string to select all categories' Id and CategoryName from pcpms_categories table
+             string sqlSelectAll = $@"
+                SELECT
+                    Id
+                    ,CategoiesName
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_categories";
+
+            var ret = await bl.DBaccess.RawSqlQueryAsync(sqlSelectAll, x => new bl.model.Categories
             {
                 // Maps the first column (Id) to Category.Id and handles DBNull values
                 Id = (x[0] == DBNull.Value) ? Guid.Empty : (Guid)x[0],

@@ -1,4 +1,49 @@
 ﻿@page
 @model PcPartManagementSystems.Pages.PCPMS.Data.Categories.IndexModel
 @{
+    ViewData["Title"] = bl.menu.mnu.Menu_Name_Category;
+}
+
+@section Topbar {
+    <a class="btn btn-secondary">Add Category</a>
+}
+
+
+<div class="container m-auto row">
+    <div class="col-10 m-auto justify-content-center">
+        <table id="CategoriesTable" style="width: 100%; padding: 0 5px 0 5px"></table>
+    </div>
+ 
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#CategoriesTable').DataTable({
+                ajax: {
+                    url: '?handler=DisplayData',
+                    dataSrc: ''
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching data:', textStatus, errorThrown);
+                    console.error(jqXHR); // The jqXHR object for the request
+                },
+                columns: [
+                    {
+                        title: "ID",
+                        data: "id"
+                    },
+                    {
+                        title: "Category Name",
+                        data: "categoryName"
+                    }
+                    // Add more columns as needed
+                ],
+
+
+
+            });
+        });
+    </script>
 }

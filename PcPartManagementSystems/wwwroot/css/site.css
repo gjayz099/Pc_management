@@ -110,11 +110,6 @@ body{
     margin: 0;
     height: 40px;
     border-radius: 20px 20px 0 0;
+
 }
 
-.back-button {
-    position: absolute;
-    right: 10px;
-    bottom: 10px;
-    
-}
