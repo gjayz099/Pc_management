@@ -129,14 +129,23 @@
             <div class="body flex-grow-1">
                 <main role="main">
 
+                    @* // Loading/ *@
                     <div id="dvLoading">
                         <img src="~/img/LoadLogo.jpg" alt="Alternate Text" />
                     </div>
+
                     @RenderBody()
+
+
                 </main>
             </div>
         </div>
     </div>
+
+
+
+    @* / Partial// *@
+    <partial name="_ErrorMassage" />
 
 
     <script src="~/lib/jquery/jquery-3.7.1.min.js" asp-append-version="true"></script>
@@ -148,16 +157,11 @@
     <script src="~/lib/datatable-bootstrap/dataTables.bootstrap5.js" asp-append-version="true"></script>
     <script src="~/lib/owl-carousel/owl.carousel.min.js" asp-append-version="true"></script>
     <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
     <script src="~/lib/coreui/coreui.bundle.min.js" asp-append-version="true"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
 
-    <script type="text/javascript">
-
-
-     
-
-     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

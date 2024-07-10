@@ -16,7 +16,14 @@ $(document).ready(function () {
     $('.hamburger_menu').click(function () {
         $('.sidebar').toggleClass('showsidebar');
     });
+
+    // on click hide modal
+    $('.back-button').click(function () {
+        $('.Modal_error').hide()
+    });
 });
+
+
 
 // Function to display loading indicator for 10 seconds
 function BtnClick() {
