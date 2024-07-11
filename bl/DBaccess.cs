@@ -191,6 +191,147 @@ namespace bl
 
 
 
+
+        // Method to execute a non-query asynchronously with parameters
+        public static async Task<int> OldExecNonQueryAsync(string strSQL, List<Microsoft.Data.SqlClient.SqlParameter> parameters, string sref = "")
+        {
+            // Check if the SQL query is empty or null
+            if (string.IsNullOrEmpty(strSQL))
+            {
+                // Log the error and return 0 if the SQL query is empty
+                sys.writelog("sql_Emty_slow", "SQL query is empty" + Environment.StackTrace, true);
+                return 0;
+            }
+
+            // Record the start time to measure execution duration
+            DateTime start = DateTime.Now;
+            int ret = 0;
+
+            // Establish a new SQL connection using the connection string from ConHelper
+            using (var sqlCn = new Microsoft.Data.SqlClient.SqlConnection(ConHelper.ConnectionConfiguration()))
+            {
+                try
+                {
+                    // Open the SQL connection asynchronously
+                    await sqlCn.OpenAsync();
+
+                    // Create a new SQL command with the provided SQL query and connection
+                    using (var cmd = new Microsoft.Data.SqlClient.SqlCommand(strSQL, sqlCn))
+                    {
+                        // Add parameters to the SQL command if any are provided
+                        cmd.Parameters.AddRange(parameters.ToArray());
+                        // Set command timeout to 1200 seconds (20 minutes)
+                        cmd.CommandTimeout = 1200;
+
+                        // Execute the non-query asynchronously and retrieve the number of rows affected
+                        ret = await cmd.ExecuteNonQueryAsync();
+                    }
+
+                    // Close the SQL connection
+                    sqlCn.Close();
+                }
+                catch (Exception ex)
+                {
+                    // Log the error with details of the SQL query and exception
+                    sys.writelog("error_PCPMS_executenonquery", strSQL + "\r\n" + sys.ReadException(ex) + " / " + ex.StackTrace);
+
+                    // Rethrow the exception to propagate it for further handling
+                    throw;
+                }
+                finally
+                {
+                    // Ensure the SQL connection is closed if it's still open
+                    if (sqlCn.State == System.Data.ConnectionState.Open)
+                    {
+                        sqlCn.Close();
+                    }
+                }
+            }
+
+            // Log slow queries if execution time exceeds 10 seconds
+            if ((DateTime.Now - start).TotalSeconds > 10)
+            {
+                Console.WriteLine($"{(DateTime.Now - start).TotalSeconds} secs - {sref} - {strSQL}");
+            }
+
+            // Return the number of rows affected by the non-query execution
+            return ret;
+        }
+
+
+
+        // Executes a scalar SQL query asynchronously and returns the result as an integer
+        public static async Task<int> ExecuteScalarAsync(string query, List<Microsoft.Data.SqlClient.SqlParameter> parameters = null, string sref = "")
+        {
+            // Check if the SQL query is empty or null
+            if (string.IsNullOrEmpty(query))
+            {
+                // Log the error if the SQL query is empty and return 0
+                sys.writelog("error_PCPMS_executescalar", "SQL query is empty /" + Environment.StackTrace);
+                return 0;
+            }
+
+            // Record the start time to measure execution duration
+            DateTime start = DateTime.Now;
+            int result = 0;
+
+            // Establish a new SQL connection using the connection string from ConHelper
+            using (var sqlCn = new Microsoft.Data.SqlClient.SqlConnection(ConHelper.ConnectionConfiguration()))
+            {
+                try
+                {
+                    // Open the SQL connection asynchronously
+                    await sqlCn.OpenAsync();
+
+                    // Create a new SQL command with the provided SQL query and connection
+                    using (var cmd = new Microsoft.Data.SqlClient.SqlCommand(query, sqlCn))
+                    {
+                        // Add parameters to the SQL command if provided
+                        if (parameters != null)
+                        {
+                            foreach (var parameter in parameters)
+                            {
+                                cmd.Parameters.Add(parameter);
+                            }
+                        }
+
+                        // Execute the scalar query asynchronously and retrieve the result
+                        object scalarResult = await cmd.ExecuteScalarAsync();
+                        result = Convert.ToInt32(scalarResult); // Convert the scalar result to an integer
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // Log the error with details of the SQL query and exception
+                    sys.writelog("error_PCPMS_executescalar", $"{query}\r\n{sys.ReadException(ex)} / {ex.StackTrace}");
+
+                    // Attempt to close the SQL connection if an exception occurs
+                    try
+                    {
+                        sqlCn.Close();
+                    }
+                    catch
+                    {
+                        // Handle any exceptions that occur during closing if needed
+                    }
+
+                    // Re-throw the exception to propagate it up the call stack
+                    throw;
+                }
+            }
+
+            // Log slow queries if execution time exceeds 10 seconds
+            if ((DateTime.Now - start).TotalSeconds > 10)
+            {
+                sys.writelog("sql_PCPMS_slow", $"{(DateTime.Now - start).TotalSeconds} secs {sref} - {query}\r\n{Environment.StackTrace}", true);
+            }
+
+            // Return the scalar result as an integer
+            return result;
+        }
+
+
+
         // Method to perform bulk insert asynchronously into a specified table
         public static async Task<bool> BulkInsert(string tableName, System.Data.DataTable dt)
         {
@@ -223,7 +364,7 @@ namespace bl
                         catch (Exception ex)
                         {
                             // Log error if bulk insert operation fails
-                            sys.writelog("error_REcom_bulkinsert", tableName + "\r\n" + sys.ReadException(ex) + " / " + ex.StackTrace);
+                            sys.writelog("error_PCPMS_bulkinsert", tableName + "\r\n" + sys.ReadException(ex) + " / " + ex.StackTrace);
                             isError = true; // Set error flag
 
                             try
@@ -234,7 +375,7 @@ namespace bl
                             catch (Exception exRollback)
                             {
                                 // Log rollback error if rollback fails
-                                sys.writelog("error_REcom_bulkinsert_rollback", tableName + "\r\n" + sys.ReadException(exRollback) + " / " + exRollback.StackTrace);
+                                sys.writelog("error_PCPMS_bulkinsert_rollback", tableName + "\r\n" + sys.ReadException(exRollback) + " / " + exRollback.StackTrace);
                             }
                         }
                     }
@@ -246,7 +387,7 @@ namespace bl
             catch (Exception ex)
             {
                 // Log error if there's an exception at the outer try-catch level (connection open/close etc.)
-                sys.writelog("error_REcom_bulkinsert", tableName + "\r\n" + sys.ReadException(ex) + " / " + ex.StackTrace);
+                sys.writelog("error_PCPMS_bulkinsert", tableName + "\r\n" + sys.ReadException(ex) + " / " + ex.StackTrace);
                 isError = true; // Set error flag
             }
 

@@ -90,26 +90,9 @@ body{
 
 
 
-/*// Modal //*/
-.Modal_error {
-    transition: 0.05s ease-in-out;
-    position: fixed;
-    top: 20%;
-    left: 55%;
-    z-index: 99;
-    transform: translate(-50%, -50%);
-    background: #ffffff;
-    width: 370px;
-    border-radius: 20px;
-    border: #0000007f solid 1px;
+
+.modal-header-error {
+    background: #ff5d5d;
+    border-radius: 5px 5px 0 0; 
+    height: 40px
 }
-
-.modal-title_header {
-    background: #9f9f9f8c;
-    width: 100%;
-    margin: 0;
-    height: 40px;
-    border-radius: 20px 20px 0 0;
-
-}
-

@@ -4,21 +4,24 @@
 
     if (!string.IsNullOrEmpty(errorMessage))
     {
-        <div class="Modal_error justify-content-center align-items-center">
-            <div class="modal-title_header"></div>
-            <div class="mx-5 mt-3" style="height: 100px">
-                <h6>@errorMessage</h6>
-            </div>
-            <div class="align-self-end ml-auto position-relative">
 
-                <a class="back-button btn btn-secondary">Back</a>
+        <div class="modal fade" id="ErrorShowModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header-error">
+                    </div>
+                    <div class="modal-body text-center">
+                        <h6>@errorMessage</h6>
+                    </div>
+                    <div class="modal-footer py-0">
+                        <button type="button" class="btn btn-secondary" id="ErrorShowModalHide">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
 
     }
 }
-
-
 
 
 

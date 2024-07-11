@@ -26,8 +26,29 @@
         }
 
 
+        public static async Task<int> InsertRequestAsync(bl.dto.Categories dto)
+        {
+            string Sql = $@"
+                INSERT INTO 
+	                {bl.refs.Databse_DB}.dbo.pcpms_categories 
+	            (
+                    Id
+                   ,CategoiesName)
+	                VALUES 
+	            (
+                    NEWID()
+                   ,@CategoiesName
+                );";
 
-        // Checks if a category exists by its name asynchronously
+            var ret = await bl.DBaccess.OldExecNonQueryAsync(Sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoiesName", Value = dto.CategoryName  }
+            });
+
+            return ret;
+        }
+
+        //Checks if a category exists by its name asynchronously
         public static async Task<(bool status, string err, List<bool> ret)> CheckIfExistingByCategories(string branchcode)
         {
             string Sql = $@"
@@ -40,27 +61,31 @@
 
             var ret = await bl.DBaccess.RawSqlQueryAsync<bool>(Sql, new List<Microsoft.Data.SqlClient.SqlParameter>
             {
-                new Microsoft.Data.SqlClient.SqlParameter("@CategoiesName", branchcode) // Parameterized query to check existence by category name
+                new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@CategoiesName", Value = branchcode }
             }, x =>
             {
-                return (x[0] == DBNull.Value) ? false : Convert.ToBoolean(x[0]); // Converts the query result to a boolean indicating existence
+                return (x[0] == DBNull.Value) ? false : Convert.ToBoolean(x[0]);
             });
 
-            return ret; // Returns the status (true if exists, false otherwise)
+            return ret;
         }
 
 
 
+        public static async Task<int> GetTotalCategoriesCountAsync(string branchcode)
+        {
+            string sqlQuery = $@"
+                SELECT COUNT(*)
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_categories";
 
-        //public async Task<int> GetTotalCategoriesCountAsync()
-        //{
-        //    string sqlQuery = @"
-        //SELECT COUNT(*)
-        //FROM dbo.pcpms_categories";
+            var ret = new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@CategoiesName", Value = branchcode }
+            };
 
-        //    int totalCount = await YourClassName.getInt(sqlQuery); // Replace YourClassName with your actual class name
+            int Count = await bl.DBaccess.ExecuteScalarAsync(sqlQuery, ret); 
 
-          //return totalCount;
-        //}
+            return Count;
+        }
     }
 }

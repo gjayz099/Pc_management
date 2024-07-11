@@ -21,6 +21,16 @@ $(document).ready(function () {
     $('.back-button').click(function () {
         $('.Modal_error').hide()
     });
+
+    $('#ErrorShowModal').modal('show');
+
+    $('#ErrorShowModalHide').click(function () {
+        $('#ErrorShowModal').modal('hide');
+    })
+
+   
+   
+
 });
 
 
@@ -32,15 +42,6 @@ function BtnClick() {
     if (dvLoading != null) {
         dvLoading.style.display = 'block'; // Display the loading indicator
     }
-
-    setTimeout(function () {
-        if (dvLoading != null) {
-            dvLoading.style.display = 'none'; // Hide the loading indicator after 10 seconds
-        }
-
-        // Proceed with form submission or other actions
-        // Example: document.forms['myForm'].submit();
-    }, 10000); // 10000 milliseconds = 10 seconds
 
     return true; // Return true to allow the form submission to proceed
 }

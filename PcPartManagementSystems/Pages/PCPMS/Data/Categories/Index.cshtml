@@ -5,13 +5,35 @@
 }
 
 @section Topbar {
-    <a class="btn btn-secondary">Add Category</a>
+    <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Category</a>
 }
+
+@* Modal *@
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Add Category</h1>
+            </div>
+            <form method="post">
+            <div class="modal-body">
+                <div class="form-text">
+                    <input type="text" class="form-control" placeholder="Categories" aria-label="Categories" asp-for="@Model.dto.CategoryName">
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between px-2">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" asp-page-handler="InsertCategory" onclick="return BtnClick()">Save</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <div class="container m-auto row">
     <div class="col-10 m-auto justify-content-center">
-        <table id="CategoriesTable" style="width: 100%; padding: 0 5px 0 5px"></table>
+        <table id="CategoriesTable" class="table table-striped" style="width: 100%; padding: 0 5px 0 5px"></table>
     </div>
  
 </div>
@@ -27,7 +49,7 @@
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching data:', textStatus, errorThrown);
-                    console.error(jqXHR); // The jqXHR object for the request
+                    Swal.fire({ icon: "error", title: errorThrown,});
                 },
                 columns: [
                     {
@@ -38,11 +60,7 @@
                         title: "Category Name",
                         data: "categoryName"
                     }
-                    // Add more columns as needed
                 ],
-
-
-
             });
         });
     </script>

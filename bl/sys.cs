@@ -64,12 +64,40 @@
 
             try
             {
+
                 // Construct error log file name with current date
                 string logFileName = $"log_error{DateTime.Now.ToString("yyyyMMdd")}.txt";
                 string logFilePath = Path.Combine(logDirectory, logFileName);
 
                 // Format error log entry with timestamp
                 string logEntry = $"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}] [{logCategory}] {logMessage}";
+
+                // Write to error log file
+                using (StreamWriter writer = new StreamWriter(logFilePath, true))
+                {
+                    writer.WriteLine(logEntry);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Handle log write exception if necessary
+                Console.WriteLine($"Error writing to log file: {ex.Message}");
+            }
+        }
+
+        public static void Acceslog(string logName, string logUser, string logAccess)
+        {
+            LogPath logPathObj = logpath();
+            string logDirectory = logPathObj.Logpath;
+
+            try
+            {
+                // Construct error log file name with current date
+                string logFileName = $"log_{logName}{DateTime.Now.ToString("yyyyMMdd")}.txt";
+                string logFilePath = Path.Combine(logDirectory, logFileName);
+
+                // Format error log entry with timestamp
+                string logEntry = $"[{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}] {logUser} {logAccess}";
 
                 // Write to error log file
                 using (StreamWriter writer = new StreamWriter(logFilePath, true))

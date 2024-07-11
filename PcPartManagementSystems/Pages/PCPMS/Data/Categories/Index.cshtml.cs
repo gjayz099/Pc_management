@@ -7,20 +7,40 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Categories
     {
 
         [BindProperty] public List<bl.model.Categories> ret {  get; set; }
-  
+
+        [BindProperty] public bl.dto.Categories dto { get; set; }
         public IActionResult OnGet()
         {
+
+            bl.sys.Acceslog("Access", "User-Gjayz", "Accses-" +bl.menu.mnu.Menu_Name_Category);
             return Page();
         }
 
 
         public async Task<IActionResult> OnGetDisplayData()
         {
+
             // Call the asynchronous method to fetch data
             ret = await bl.dto.Categories.GetAllAsync();
 
             // Return the fetched data as a JSON result
             return new JsonResult(ret);
+        }
+
+        public async Task<IActionResult> OnPostInsertCategory()
+        {
+
+            var error = await bl.dto.Categories.InsertAllAsync(dto);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                TempData[bl.refs.ErrorMessage] = error;
+                return RedirectToPage();
+            }
+
+
+            return Page();
+      
         }
     }
 }

@@ -50,6 +50,7 @@
             padding-bottom: 10px;
             padding-right: 15px; 
             border-bottom: 1px solid #03030364;
+            box-shadow: 0 0 3px 0  #03030364;
 
         }
 
@@ -74,24 +75,27 @@
                 <li class="nav-item">
                     <a class="nav-link text-black" href="#">
                         <i class="nav-icon bx bxs-dashboard"></i> With badge
-         @*                <span class="badge bg-primary ms-auto">NEW</span> *@
+                        @*<span class="badge bg-primary ms-auto">NEW</span> *@
                     </a>
                 </li>
                 <li class="nav-item nav-group">
                     <a class="nav-link nav-group-toggle text-black">
                         <i class="nav-icon bx bxs-dashboard"></i> Nav dropdown
                     </a>
+                    <!-- Example of dynamic menu items -->
+             
                     <ul class="nav-group-items">
-                        <li class="nav-item">
-                            <a class="nav-link text-black" href="#">
-                                <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Nav dropdown item
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-black" href="#">
-                                <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Nav dropdown item
-                            </a>
-                        </li>
+
+                        @foreach (var menu in bl.menu.mnu.mnuMenuList)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-black" asp-page="@menu.Url">
+                                    <span class="nav-icon"><span class="bx bxs-dashboard"></span></span>@menu.Name
+                                </a>
+                            </li>
+                           
+                        }
+                      
                     </ul>
                 </li>
 
