@@ -37,9 +37,12 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Categories
                 TempData[bl.refs.ErrorMessage] = error;
                 return RedirectToPage();
             }
+            // Set success message
+            TempData[bl.refs.SeccessMessage] = $@"{dto.CategoryName} successfully inserted!";
 
+    
 
-            return Page();
+            return RedirectToPage();
       
         }
     }

@@ -22,9 +22,9 @@ namespace bl.dto
         {
             if (string.IsNullOrEmpty(categories.CategoryName)) return "Category Name is empty";
 
-            var existingCheck = await bl.data.Categories.CheckIfExistingByCategories(categories.CategoryName);
+            int count = await bl.data.Categories.CheckCountCategories(categories.CategoryName);
 
-            if (existingCheck.status != true) return "Category Name already exists";
+            if (count > 0) return "Category Name is exists";
 
             await bl.data.Categories.InsertRequestAsync(categories);
 

@@ -12,6 +12,7 @@
 
         // Static strings for various popups and notifications
         public static string ErrorMessage = "ErrorMsg";
+        public static string SeccessMessage = "SeccessMsg";
         public static string ConfirmMessage = "ConfirmMsg";
         public static string ConfirmWarningMessage = "ConfirmWarningMsg";
         public static string NotifyMessage = "Message";

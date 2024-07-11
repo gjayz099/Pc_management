@@ -52,12 +52,11 @@
         public static async Task<(bool status, string err, List<bool> ret)> CheckIfExistingByCategories(string branchcode)
         {
             string Sql = $@"
-            SELECT ISNULL(
-                (SELECT 1 
-                 FROM {bl.refs.Databse_DB}.dbo.pcpms_categories
-                 WHERE CategoiesName = @CategoiesName)
-                ,0
-            ) AS result";
+               SELECT CASE WHEN EXISTS (
+                SELECT 1
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_categories
+                WHERE CategoiesName = @CategoiesName
+            ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS result";
 
             var ret = await bl.DBaccess.RawSqlQueryAsync<bool>(Sql, new List<Microsoft.Data.SqlClient.SqlParameter>
             {
@@ -72,11 +71,13 @@
 
 
 
-        public static async Task<int> GetTotalCategoriesCountAsync(string branchcode)
+        public static async Task<int> CheckCountCategories(string branchcode)
         {
             string sqlQuery = $@"
                 SELECT COUNT(*)
-                FROM {bl.refs.Databse_DB}.dbo.pcpms_categories";
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_categories
+                where CategoiesName =@CategoiesName"
+                ;
 
             var ret = new List<Microsoft.Data.SqlClient.SqlParameter>
             {
