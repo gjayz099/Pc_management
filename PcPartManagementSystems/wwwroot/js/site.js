@@ -76,6 +76,32 @@ function formatCurrency(amount) {
 
 ////// Select2
 
+
+
+function matchCustom(params, data) {
+    // If there are no search terms, return all of the data
+    if ($.trim(params.term) === '') {
+        return data;
+    }
+
+    // Do not display the item if there is no 'text' property
+    if (typeof data.text === 'undefined') {
+        return null;
+    }
+
+    // `params.term` should be the term that is used for searching
+    // `data.text` is the text that is displayed for the data object
+    if (data.text.indexOf(params.term) > -1) {
+        var modifiedData = $.extend({}, data, true);
+        modifiedData.text += ' (matched)';
+        return modifiedData;
+    }
+
+    // Return `null` if the term should not be displayed
+    return null;
+}
+
+
 // Function to populate a Select2 dropdown from a URL
 function setSelect2(url, selector, selectedValue) {
     // Make an AJAX request to fetch data from the specified URL
@@ -112,35 +138,38 @@ function setSelect2(url, selector, selectedValue) {
 }
 
 
-function setSelect2(url, selector) {
-    // Make an AJAX request to fetch data from the specified URL
-    $.ajax({
-        url: url,
-        method: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            // Clear existing options in the dropdown
-            $(selector).empty();
+//function setSelect2(url, selector) {
+//    // Make an AJAX request to fetch data from the specified URL
+//    $.ajax({
+//        url: url,
+//        method: 'GET',
+//        dataType: 'json',
+//        success: function (data) {
+//            // Clear existing options in the dropdown
+//            $(selector).empty();
+//            // Populate dropdown with fetched data
+//            $.each(data, function (index, item) {
+//                $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
+//            });
 
-            // Populate dropdown with fetched data
-            $.each(data, function (index, item) {
-                $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
-            });
 
-     
-            // Trigger change event to update Select2 UI
-            $(selector).trigger('change');
-        },
-        error: function (xhr, status, error) {
-            console.error('Error fetching data:', error);
-            // Handle error scenario as needed
-        }
-    });
-}
+//            // Trigger change event to update Select2 UI
+//            $(selector).trigger('change');
+//        },
+//        error: function (xhr, status, error) {
+//            console.error('Error fetching data:', error);
+//            // Handle error scenario as needed
+//        }
+//    });
+//}
+
+
+
 
 
 // Function to set Select2 options after fetching data via AJAX
-function setSelect2(url, selector, searchTerm, page) {
+
+function setSelect2WithSearch(url, selector) {
     $.ajax({
         url: url,
         method: 'GET',
@@ -162,12 +191,12 @@ function setSelect2(url, selector, searchTerm, page) {
                 $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
             });
 
-            // Update Select2 with new options
+            // Trigger change event to update Select2
             $(selector).trigger('change.select2');
         },
         error: function (xhr, status, error) {
             console.error('Error fetching data:', error);
             // Handle error scenario as needed
         }
-    })
+    });
 }

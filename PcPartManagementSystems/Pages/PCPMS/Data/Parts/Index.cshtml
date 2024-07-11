@@ -3,48 +3,29 @@
 @{
 }
 
-<select id="Category" style="width: 300px"></select>
+<div class="row m-auto justify-content-center">
+    <div class="col-12 text-center">
+
+       @*  <select id="Category" class="form-control" style="max-width: 500px;" multiple></select> *@
+    </div>
+</div>
+
 
 @section scripts {
     <script type="text/javascript">
         $(document).ready(function() {
-
-            var searchTerm = ''; // Initialize with an empty string or get from user input
-            var page = 1; // Initialize with page 1 or get from pagination state
-
             $('#Category').select2({
                 theme: 'bootstrap-5',          // Use Bootstrap 5 theme
                 allowClear: false,              // Allow the dropdown to be cleared
-                placeholder: '--Select--'        // Set placeholder text
+                placeholder: '--Select--',        // Set placeholder text
+                minimumInputLength: 3, // only start searching when the user has input 3 or more characters
+                closeOnSelect: false,
+               
             })
 
-            // Function to fetch Select2 options
-            function fetchSelectOptions() {
-                setSelect2('/sel?handler=AllCategory', '#Category', searchTerm, page);
-            }
-
-            // Initial fetch when document is ready
-            fetchSelectOptions();
-
-            // Example of triggering fetch based on user interaction (e.g., search button click)
-            $('#searchButton').click(function () {
-                searchTerm = $('#searchInput').val(); // Update searchTerm from input field
-                page = 1; // Reset page to 1 for new search
-                fetchSelectOptions();
-            });
-
-            // Example of triggering fetch based on pagination navigation
-            $('#nextPageButton').click(function () {
-                page++; // Increment page number for next page
-                fetchSelectOptions();
-            });
-
-            $('#prevPageButton').click(function () {
-                if (page > 1) {
-                    page--; // Decrement page number for previous page, ensuring it doesn't go below 1
-                    fetchSelectOptions();
-                }
-            });
+            setSelect2WithSearch('/sel?handler=AllCategory', '#Category');
+      
+       
 
         })
     </script>
