@@ -115,30 +115,59 @@ function setSelect2(url, selector, selectedValue) {
 function setSelect2(url, selector) {
     // Make an AJAX request to fetch data from the specified URL
     $.ajax({
-        url: url,                // URL to fetch data from
-        method: 'GET',           // HTTP method (GET)
-        dataType: 'json',        // Data type expected from the server (JSON)
+        url: url,
+        method: 'GET',
+        dataType: 'json',
         success: function (data) {
-            // Successful AJAX request handler
-
             // Clear existing options in the dropdown
             $(selector).empty();
 
             // Populate dropdown with fetched data
             $.each(data, function (index, item) {
-                // Append an <option> element for each item in the data
                 $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
             });
 
+     
             // Trigger change event to update Select2 UI
             $(selector).trigger('change');
         },
         error: function (xhr, status, error) {
-            // Error handler for AJAX request
             console.error('Error fetching data:', error);
-
             // Handle error scenario as needed
-            // For example, display an error message or retry the request
         }
     });
+}
+
+
+// Function to set Select2 options after fetching data via AJAX
+function setSelect2(url, selector, searchTerm, page) {
+    $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json',
+        data: function (params) {
+            return {
+                q: params.term, // search term
+                page: params.page
+            };
+        },
+        success: function (data) {
+            $(selector).empty(); // Clear existing options in the dropdown
+
+            // Add the placeholder option
+            $(selector).append('<option value="">--Select--</option>');
+
+            // Populate dropdown with fetched data
+            $.each(data, function (index, item) {
+                $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+
+            // Update Select2 with new options
+            $(selector).trigger('change.select2');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+            // Handle error scenario as needed
+        }
+    })
 }

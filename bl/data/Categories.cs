@@ -49,25 +49,25 @@
         }
 
         //Checks if a category exists by its name asynchronously
-        public static async Task<(bool status, string err, List<bool> ret)> CheckIfExistingByCategories(string branchcode)
-        {
-            string Sql = $@"
-               SELECT CASE WHEN EXISTS (
-                SELECT 1
-                FROM {bl.refs.Databse_DB}.dbo.pcpms_categories
-                WHERE CategoiesName = @CategoiesName
-            ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS result";
+        //public static async Task<(bool status, string err, List<bool> ret)> CheckIfExistingByCategories(string branchcode)
+        //{
+        //    string Sql = $@"
+        //       SELECT CASE WHEN EXISTS (
+        //        SELECT 1
+        //        FROM {bl.refs.Databse_DB}.dbo.pcpms_categories
+        //        WHERE CategoiesName = @CategoiesName
+        //    ) THEN CAST(1 AS BIT) ELSE CAST(0 AS BIT) END AS result";
 
-            var ret = await bl.DBaccess.RawSqlQueryAsync<bool>(Sql, new List<Microsoft.Data.SqlClient.SqlParameter>
-            {
-                new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@CategoiesName", Value = branchcode }
-            }, x =>
-            {
-                return (x[0] == DBNull.Value) ? false : Convert.ToBoolean(x[0]);
-            });
+        //    var ret = await bl.DBaccess.RawSqlQueryAsync<bool>(Sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+        //    {
+        //        new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@CategoiesName", Value = branchcode }
+        //    }, x =>
+        //    {
+        //        return (x[0] == DBNull.Value) ? false : Convert.ToBoolean(x[0]);
+        //    });
 
-            return ret;
-        }
+        //    return ret;
+        //}
 
 
 
