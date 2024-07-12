@@ -96,5 +96,6 @@ body{
     border-radius: 5px 5px 0 0; 
     height: 40px
 }
-
-
+tbody, td, tfoot, th, thead, tr {
+    border-style: none;
+}

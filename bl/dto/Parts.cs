@@ -1,12 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace bl.dto
+﻿namespace bl.dto
 {
-    internal class Parts
+    public class Parts
     {
+        public Guid NanufactureId { get; set; }
+
+        public string Description { get; set; }
+
+
+     
     }
+
 }

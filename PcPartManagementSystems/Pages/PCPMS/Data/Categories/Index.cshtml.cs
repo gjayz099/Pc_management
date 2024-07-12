@@ -21,7 +21,7 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Categories
         {
 
             // Call the asynchronous method to fetch data
-            ret = await bl.dto.Categories.GetAllAsync();
+            ret = await bl.model.Categories.GetAllAsync();
 
             // Return the fetched data as a JSON result
             return new JsonResult(ret);

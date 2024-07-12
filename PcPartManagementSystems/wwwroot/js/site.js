@@ -78,30 +78,6 @@ function formatCurrency(amount) {
 
 
 
-function matchCustom(params, data) {
-    // If there are no search terms, return all of the data
-    if ($.trim(params.term) === '') {
-        return data;
-    }
-
-    // Do not display the item if there is no 'text' property
-    if (typeof data.text === 'undefined') {
-        return null;
-    }
-
-    // `params.term` should be the term that is used for searching
-    // `data.text` is the text that is displayed for the data object
-    if (data.text.indexOf(params.term) > -1) {
-        var modifiedData = $.extend({}, data, true);
-        modifiedData.text += ' (matched)';
-        return modifiedData;
-    }
-
-    // Return `null` if the term should not be displayed
-    return null;
-}
-
-
 // Function to populate a Select2 dropdown from a URL
 function setSelect2(url, selector, selectedValue) {
     // Make an AJAX request to fetch data from the specified URL

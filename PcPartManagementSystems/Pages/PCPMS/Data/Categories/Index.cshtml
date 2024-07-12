@@ -5,7 +5,9 @@
 }
 
 @section Topbar {
-    <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Category</a>
+    <div class="py-2">
+        <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Category</a>
+    </div>
 }
 
 @* Modal *@
@@ -18,7 +20,7 @@
             <form method="post">
             <div class="modal-body">
                 <div class="form-text">
-                    <input type="text" class="form-control" placeholder="Categories" aria-label="Categories" asp-for="@Model.dto.CategoryName">
+                    <input type="text" class="form-control" placeholder="Categories" aria-label="Categories" asp-for="@Model.dto.CategoryName" autocomplete="off">
                 </div>
             </div>
             <div class="modal-footer d-flex justify-content-between px-2">
@@ -35,7 +37,6 @@
     <div class="col-10 m-auto justify-content-center">
         <table id="CategoriesTable" class="table table-striped" style="width: 100%; padding: 0 5px 0 5px"></table>
     </div>
- 
 </div>
 
 
@@ -43,22 +44,27 @@
     <script type="text/javascript">
         $(document).ready(function () {
 
+            // Function to clear input field
             $('#ClearInput').click(function () {
-                $('#dto_CategoryName').val('')
+                $('#dto_CategoryName').val('');
             });
 
-
-
-
+            // DataTable initialization
             $('#CategoriesTable').DataTable({
                 ajax: {
                     url: '?handler=DisplayData',
-                    dataSrc: ''
+                    dataSrc: '',
                 },
+                order: [[1, 'desc']], // Sort by Category Name descending by default
+                info: false, // Hide info text "Showing x of y entries"
+                ordering: false, // Disable sorting initially
+
+                // Error handling
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.error('Error fetching data:', textStatus, errorThrown);
-                    Swal.fire({ icon: "error", title: errorThrown,});
+                    Swal.fire({ icon: "error", title: errorThrown });
                 },
+
                 columns: [
                     {
                         title: "ID",
@@ -71,9 +77,7 @@
                 ],
             });
 
-           
-      
-            
         });
+
     </script>
 }

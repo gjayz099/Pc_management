@@ -6,15 +6,19 @@ CREATE TABLE pcpms_categories (
 
 CREATE TABLE pcpms_parts (
     Id uniqueidentifier PRIMARY KEY,
-    PartName NVARCHAR(50) NULL,
-    Manufacturer NVARCHAR(50) NULL,
+    ManufacturerID NVARCHAR(50) NULL,
     Specifications NVARCHAR(150) NULL,
-    CategoryID uniqueidentifier NULL,
     Description NVARCHAR(150) NULL,
-    Stock INT NULL,
-    Price Decimal(10, 2) NULL -- Adjusted decimal precision and scale
 );
 
+CREATE TABLE pcpms_Manufature (
+    Id uniqueidentifier PRIMARY KEY,
+	ManufatureName  NVARCHAR(50) NULL,
+	CategoryID NVARCHAR(50) NULL,
+	Stock int NULL,
+	Price Decimal(10, 2) NULL,
+
+);
 
 
 CREATE TABLE pcpms_sale (
