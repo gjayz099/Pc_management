@@ -32,7 +32,7 @@
       
         public static List<bl.menu.mnu.Menu> mnuMenuList = new List<bl.menu.mnu.Menu>
         {
-            new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Parts, Name = bl.menu.mnu.Menu_Name_Parts, Url = "/PCPMS/Data/Parts/Index"},
+            
             new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Sale, Name = bl.menu.mnu.Menu_Name_Sale, Url = "/PCPMS/Data/Sale/Index"},
             new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Category, Name = bl.menu.mnu.Menu_Name_Category, Url = "/PCPMS/Data/Categories/Index"},
         };

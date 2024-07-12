@@ -114,6 +114,45 @@ function setSelect2(url, selector, selectedValue) {
 }
 
 
+
+function setSelect2WithSearch(url, selector, selectedId) {
+    $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json',
+        data: function (params) {
+            return {
+                q: params.term, // search term
+                page: params.page
+            };
+        },
+        success: function (data) {
+            $(selector).empty(); // Clear existing options in the dropdown
+
+            // Add the placeholder option
+            $(selector).append('<option value="">--Select--</option>');
+
+            // Populate dropdown with fetched data
+            $.each(data, function (index, item) {
+                $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+
+            // Trigger change event to update Select2
+            $(selector).trigger('change.select2');
+
+            // Preselect the option with the specified selectedId
+            if (selectedId) {
+                $(selector).val(selectedId).trigger('change.select2');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+            // Handle error scenario as needed
+        }
+    });
+}
+
+
 //function setSelect2(url, selector) {
 //    // Make an AJAX request to fetch data from the specified URL
 //    $.ajax({
