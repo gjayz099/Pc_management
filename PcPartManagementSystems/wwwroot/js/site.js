@@ -79,7 +79,7 @@ function formatCurrency(amount) {
 
 
 // Function to populate a Select2 dropdown from a URL
-function setSelect2(url, selector, selectedValue) {
+function setSelect2ID(url, selector, selectedValue) {
     // Make an AJAX request to fetch data from the specified URL
     $.ajax({
         url: url,
@@ -114,69 +114,43 @@ function setSelect2(url, selector, selectedValue) {
 }
 
 
-
-function setSelect2WithSearch(url, selector, selectedId) {
+function setSelect2Name(url, selector, selectedValue) {
     $.ajax({
-        url: url,
-        method: 'GET',
-        dataType: 'json',
-        data: function (params) {
-            return {
-                q: params.term, // search term
-                page: params.page
-            };
-        },
+        url: url, // URL to fetch data from
+        method: 'GET', // HTTP method for the request
+        dataType: 'json', // Expected data type of the response
         success: function (data) {
-            $(selector).empty(); // Clear existing options in the dropdown
+            $(selector).empty(); // Clear any existing options in the selector
 
             // Add the placeholder option
-            $(selector).append('<option value="">--Select--</option>');
+            var placeholderOption = '<option value="">--Select--</option>';
+            $(selector).append(placeholderOption);
 
-            // Populate dropdown with fetched data
+            var isValueSelected = false; // Flag to track if the selectedValue is found in the data
+
+            // Loop through the data to create options
             $.each(data, function (index, item) {
-                $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
+                var option = '<option value="' + item.id + '">' + item.text + '</option>';
+                // Check if the current item matches the selectedValue
+                if (item.text === selectedValue) {
+                    option = '<option value="' + item.id + '" selected="selected">' + item.text + '</option>';
+                    isValueSelected = true; // Mark the selectedValue as found
+                }
+                $(selector).append(option); // Append the option to the selector
             });
 
-            // Trigger change event to update Select2
-            $(selector).trigger('change.select2');
-
-            // Preselect the option with the specified selectedId
-            if (selectedId) {
-                $(selector).val(selectedId).trigger('change.select2');
+            // If the selected value was not found, select the placeholder option
+            if (!isValueSelected) {
+                $(selector).val(''); // Select the placeholder option
             }
+
+            $(selector).trigger('change'); // Trigger change event to update the select2 plugin
         },
         error: function (xhr, status, error) {
-            console.error('Error fetching data:', error);
-            // Handle error scenario as needed
+            console.error('Error fetching data:', error); // Log any error that occurs during the AJAX request
         }
     });
 }
-
-
-//function setSelect2(url, selector) {
-//    // Make an AJAX request to fetch data from the specified URL
-//    $.ajax({
-//        url: url,
-//        method: 'GET',
-//        dataType: 'json',
-//        success: function (data) {
-//            // Clear existing options in the dropdown
-//            $(selector).empty();
-//            // Populate dropdown with fetched data
-//            $.each(data, function (index, item) {
-//                $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
-//            });
-
-
-//            // Trigger change event to update Select2 UI
-//            $(selector).trigger('change');
-//        },
-//        error: function (xhr, status, error) {
-//            console.error('Error fetching data:', error);
-//            // Handle error scenario as needed
-//        }
-//    });
-//}
 
 
 
@@ -215,3 +189,32 @@ function setSelect2WithSearch(url, selector) {
         }
     });
 }
+
+
+
+function setSelect2WithoutSearch(url, selector) {
+    $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            $(selector).empty(); // Clear existing options in the dropdown
+
+            // Add the placeholder option
+            $(selector).append('<option value="">--Select--</option>');
+
+            // Populate dropdown with fetched data
+            $.each(data, function (index, item) {
+                $(selector).append('<option value="' + item.id + '">' + item.text + '</option>');
+            });
+
+            // Trigger change event to update Select2
+            $(selector).trigger('change.select2');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+            // Handle error scenario as needed
+        }
+    });
+}
+

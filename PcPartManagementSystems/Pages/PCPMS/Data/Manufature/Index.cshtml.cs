@@ -5,8 +5,18 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
+
+        [BindProperty] List<bl.model.Manufacturies.ManufacturiesWithCategories> ret {  get; set; }
+        public IActionResult OnGet()
         {
+            return Page();
         }
+        public async Task<IActionResult> OnGetDisplayData()
+        {
+            ret = await bl.model.Manufacturies.GetAllAsync();
+
+            return new JsonResult(ret);
+        }
+ 
     }
 }

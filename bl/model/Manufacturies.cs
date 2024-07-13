@@ -10,5 +10,39 @@
         public decimal Price { get; set; }
         public string Description { get; set; }
 
+
+        public class ManufacturiesWithCategories
+        {
+            public Guid Id { get; set; }
+            public string ManufactureName { get; set; }
+            public string Specification { get; set; } //ex 8 cores, 16 threads, 3.5 GHz base, 5.2 GHz turbo
+            public string CategotyName { get; set; }
+            public int Stock { get; set; }
+            public decimal Price { get; set; }
+            public string Description { get; set; }
+
+        }
+
+
+        public static async Task<List<bl.model.Manufacturies.ManufacturiesWithCategories>> GetAllAsync()
+        {
+            List<bl.model.Manufacturies.ManufacturiesWithCategories> ret;
+
+            ret = await bl.data.Manufaturies.ExecuteQueryAsync();
+
+            return ret;
+
+        }
+
+        public static async Task<bl.model.Manufacturies.ManufacturiesWithCategories> GetIDAsync(Guid? id)
+        {
+            bl.model.Manufacturies.ManufacturiesWithCategories ret;
+
+            ret = await bl.data.Manufaturies.ExecuteQueryIDAsync(id);
+
+            return ret;
+
+        }
     }
+
 }

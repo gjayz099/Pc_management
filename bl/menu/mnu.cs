@@ -12,7 +12,7 @@
 
         /// UI 
         public static string Menu_Dashboard = "MN00";
-        public static string Menu_Parts = "MN01";
+        public static string Menu_Manufature = "MN01";
         public static string Menu_Sale = "MN02";
         public static string Menu_Category = "MN03";
         public static string Menu_Re_01 = "RMN01";
@@ -21,7 +21,7 @@
 
         //// Name
         public static string Menu_Name_Dashboard = "DASHBOARD";
-        public static string Menu_Name_Parts = "PARTS";
+        public static string Menu_Name_Manufature = "MANUFATURE";
         public static string Menu_Name_Sale = "SALES";
         public static string Menu_Name_Category = "CATEGORIES";
         public static string Menu_Name_Re_01 = "RMN01";
@@ -32,9 +32,9 @@
       
         public static List<bl.menu.mnu.Menu> mnuMenuList = new List<bl.menu.mnu.Menu>
         {
-            
-            new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Sale, Name = bl.menu.mnu.Menu_Name_Sale, Url = "/PCPMS/Data/Sale/Index"},
+            new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Manufature, Name = bl.menu.mnu.Menu_Name_Manufature, Url = "/PCPMS/Data/Manufature/Index"},
             new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Category, Name = bl.menu.mnu.Menu_Name_Category, Url = "/PCPMS/Data/Categories/Index"},
+            new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Sale, Name = bl.menu.mnu.Menu_Name_Sale, Url = "/PCPMS/Data/Sale/Index"},
         };
 
 
