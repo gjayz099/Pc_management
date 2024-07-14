@@ -190,6 +190,69 @@ namespace bl
         }
 
 
+        public static async Task<(bool status, string errorstr, T data)> RawSqlQuerySingleAsync<T>(string query, List<Microsoft.Data.SqlClient.SqlParameter> _params, Func<System.Data.Common.DbDataReader, T> map)
+        {
+            string errormsg = "";
+
+            try
+            {
+                DateTime start = DateTime.Now;
+
+                using (var sqlCn = new Microsoft.Data.SqlClient.SqlConnection(ConHelper.ConnectionConfiguration()))
+                {
+                    using (var command = new Microsoft.Data.SqlClient.SqlCommand(query, sqlCn))
+                    {
+                        command.CommandType = System.Data.CommandType.Text;
+                        command.CommandTimeout = 1200;
+
+                        foreach (var p in _params)
+                        {
+                            command.Parameters.Add(p);
+                        }
+
+                        sqlCn.Open();
+
+                        using (var result = await command.ExecuteReaderAsync())
+                        {
+                            if (result.Read())
+                            {
+                                T entity = map(result);
+
+                                result.Close();
+                                sqlCn.Close();
+
+                                if ((DateTime.Now - start).TotalSeconds > 3)
+                                {
+                                    sys.writelog("sql_PCPMS_slow", (DateTime.Now - start).TotalSeconds.ToString() + "secs SLOW: " + query + "\r\n" + Environment.StackTrace, true);
+                                }
+
+                                return (true, "", entity);
+                            }
+                            else
+                            {
+                                result.Close();
+                                sqlCn.Close();
+
+                                // Handle case where no data was found
+                                return (false, "No data found for the query", default);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Microsoft.Data.SqlClient.SqlException sqex)
+            {
+                errormsg = "Error: " + sqex.Message;
+                sys.writelog("error_PCPMS_executequery", "Error: " + query + "\r\n" + sys.ReadException(sqex) + "/" + sqex.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                errormsg = "Error: " + ex.Message;
+                sys.writelog("error_PCPMS_executequery", "Error: " + query + "\r\n" + sys.ReadException(ex) + "/" + ex.StackTrace);
+            }
+
+            return (false, errormsg, default);
+        }
 
 
         // Method to execute a non-query asynchronously with parameters
@@ -258,6 +321,82 @@ namespace bl
             return ret;
         }
 
+
+        // Method to execute a non-query asynchronously with parameters and return status and error message
+        public static async Task<(string err, int retcnt)> ExecNonQueryAsync(string strSQL, List<Microsoft.Data.SqlClient.SqlParameter> _params, string sref = "")
+        {
+            // Check if the SQL query is empty
+            if (string.IsNullOrEmpty(strSQL))
+            {
+                // Log the error if the SQL query is empty
+                sys.writelog("error_PCPMS_executenonquery", "sql is empty /" + Environment.StackTrace);
+                return ("sql is empty", 0);
+            }
+
+            // Record the start time to measure execution duration
+            DateTime start = DateTime.Now;
+            int ret = 0;
+
+            using (var sqlCn = new Microsoft.Data.SqlClient.SqlConnection(ConHelper.ConnectionConfiguration()))
+            {
+                try
+                {
+                    // Open the SQL connection
+                    sqlCn.Open();
+
+                    // Create a new SQL command with the provided SQL query and connection
+                    Microsoft.Data.SqlClient.SqlCommand cmd = new Microsoft.Data.SqlClient.SqlCommand(strSQL, sqlCn);
+
+                    // Add parameters to the SQL command
+                    foreach (var p in _params)
+                    {
+                        cmd.Parameters.Add(p);
+                    }
+
+                    // Set command timeout to 1200 seconds (20 minutes)
+                    cmd.CommandTimeout = 1200;
+
+                    // Execute the non-query asynchronously and retrieve the number of rows affected
+                    ret = await cmd.ExecuteNonQueryAsync();
+
+                    // Close the SQL connection
+                    sqlCn.Close();
+                }
+                catch (Exception ex)
+                {
+                    // Log the error with details of the SQL query and exception
+                    sys.writelog("error_PCPMS_executenonquery", strSQL + "\r\n" + sys.ReadException(ex) + " / " + ex.StackTrace);
+
+                    try
+                    {
+                        // Try to close the SQL connection in case of an exception
+                        sqlCn.Close();
+                    }
+                    catch
+                    {
+                        // Handle any errors that might occur while closing the connection
+                    }
+
+                    // Return an error message with the exception details
+                    return ("Error: " + ex.Message, 0);
+                }
+
+                // Log if no rows were affected by the non-query execution
+                if (ret == 0)
+                {
+                    sys.writelog("executenonquery_PCPMS_zero", sref + " - " + strSQL + "\r\n" + Environment.StackTrace);
+                }
+            }
+
+            // Log slow queries if execution time exceeds 10 seconds
+            if ((DateTime.Now - start).TotalSeconds > 10)
+            {
+                sys.writelog("sqlREcom_slow", (DateTime.Now - start).TotalSeconds.ToString() + "secs " + sref + " - " + strSQL + "\r\n" + Environment.StackTrace, true);
+            }
+
+            // Return an empty error message and the number of rows affected
+            return ("", ret);
+        }
 
 
         // Executes a scalar SQL query asynchronously and returns the result as an integer

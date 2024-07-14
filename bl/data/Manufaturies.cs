@@ -1,25 +1,32 @@
-﻿namespace bl.data
+﻿using bl.model;
+using Microsoft.Data.SqlClient;
+using Microsoft.SqlServer.Management.Smo;
+using System.Reflection.Metadata;
+
+namespace bl.data
 {
     public class Manufaturies
     {
 
-        public static async Task<List<bl.model.Manufacturies.ManufacturiesWithCategories>> ExecuteQueryAsync()
-        {
-            // SQL query to select all manufacturers with categories
-            string sqlSelectAll = $@"
+        public static string  sqlSelectAll = $@"
                 SELECT
                     mtr.id
                     ,mtr.ManufatureName
                     ,mtr.Specification
-                    ,ctr.CategoiesName
+                    ,ctr.CategoriesName
 	                ,mtr.Price
 	                ,mtr.Stock
 	                ,mtr.Description
                     FROM {bl.refs.Databse_DB}.dbo.pcpms_Manufature mtr
-                    JOIN {bl.refs.Databse_DB}.dbo.pcpms_categories ctr ON ctr.Id = mtr.CategoryID;";
+                    JOIN {bl.refs.Databse_DB}.dbo.pcpms_categories ctr ON ctr.Id = mtr.CategoryID";
+
+        public static async Task<(bool err, string stauts, List<bl.model.Manufacturies.ManufacturiesWithCategories> data)> ExecuteQueryAsync()
+        {
+            // SQL query to select all manufacturers with categories
+         
 
             // Execute the raw SQL query asynchronously
-            var ret = await bl.DBaccess.RawSqlQueryAsync(sqlSelectAll, x => new bl.model.Manufacturies.ManufacturiesWithCategories
+            var ret  = await bl.DBaccess.OldRawSqlQueryAsync(sqlSelectAll, x => new bl.model.Manufacturies.ManufacturiesWithCategories
             {
                 // Mapping SQL result to C# object
                 Id = (x[0] == DBNull.Value) ? Guid.Empty : (Guid)x[0],
@@ -32,42 +39,109 @@
             });
 
             // Return the list of manufacturers with categories
-            return ret.data;
+            return (false, "Success", ret);
         }
 
-        public static async Task<bl.model.Manufacturies.ManufacturiesWithCategories> ExecuteQueryIDAsync(Guid? id)
+        public static async Task<bl.dto.Manufacturies> ExecuteQueryIDAsync(Guid? id)
         {
-            string sqlSelectAll = $@"
-                SELECT
-                    mtr.id
-                    ,mtr.ManufatureName
-                    ,mtr.Specification
-                    ,ctr.CategoiesName
-	                ,mtr.Price
-	                ,mtr.Stock
-	                ,mtr.Description
-                    FROM {bl.refs.Databse_DB}.dbo.pcpms_Manufature mtr
-                    JOIN {bl.refs.Databse_DB}.dbo.pcpms_categories ctr ON ctr.Id = mtr.CategoryID
-                    WHERE mtr.id = @Id;";
-
-            // Create parameter for Id
-            var parameters = new List<Microsoft.Data.SqlClient.SqlParameter>
+                    string sqlwhereID = $@"
+                    SELECT
+                        ManufatureName,
+                        Specification,
+                        CategoryID,
+                        Price,
+                        Stock,
+                        Description
+                    FROM {bl.refs.Databse_DB}.dbo.pcpms_Manufature
+                    WHERE Id = @Id";
+            var par = new List<Microsoft.Data.SqlClient.SqlParameter>
             {
-                new Microsoft.Data.SqlClient.SqlParameter("@Id", id)
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Id", Value = id}
             };
 
-            var ret = await bl.DBaccess.RawSqlQueryAsync(sqlSelectAll, parameters, x => new bl.model.Manufacturies.ManufacturiesWithCategories
+            var ret = await bl.DBaccess.RawSqlQuerySingleAsync(sqlwhereID, par, x => new bl.dto.Manufacturies
             {
-                Id = (x[0] == DBNull.Value) ? Guid.Empty : (Guid)x[0],
-                ManufactureName = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
-                Specification = (x[2] == DBNull.Value) ? string.Empty : (string)x[2],
-                CategotyName = (x[3] == DBNull.Value) ? string.Empty : (string)x[3],
-                Price = (x[4] == DBNull.Value) ? 0 : (decimal)x[4],
-                Stock = (x[5] == DBNull.Value) ? 0 : (int)x[5],
-                Description = (x[6] == DBNull.Value) ? string.Empty : (string)x[6],
+
+   
+                ManufactureName = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
+                Specification = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
+                CategotyID = (x[2] == DBNull.Value) ? Guid.Empty : (Guid)x[2],
+                Price = (x[3] == DBNull.Value) ? 0 : (decimal)x[3],
+                Stock = (x[4] == DBNull.Value) ? 0 : (int)x[4],
+                Description = (x[5] == DBNull.Value) ? string.Empty : (string)x[5],
+     
             });
 
-            return ret.data[0];
+
+            return ret.data;
+
         }
+
+
+
+        public static async Task<string> InsertDataAsync(bl.dto.Manufacturies dto)
+        {
+            string sql = $@"INSERT INTO {bl.refs.Databse_DB}.dbo.pcpms_Manufature
+                            (    
+                                Id
+                                ,ManufatureName
+                                ,Specification
+                                ,CategoryID
+                             ,Price
+                             ,Stock
+                             ,Description
+                            )
+                            VALUES
+                            (
+                                NEWID()
+                                ,@ManufatureName
+                                ,@Specification
+                                ,@CategoryID
+                             ,@Price
+                             ,@Stock
+                             ,@Description
+                            )";
+
+            int ret = await bl.DBaccess.OldExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@ManufatureName", Value = dto.ManufactureName},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Specification", Value = dto.Specification},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoryID", Value = dto.CategotyID},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Price", Value = dto.Price},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Stock", Value = dto.Stock},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = dto.Description}
+            });
+
+
+            return $"Add {ret} Data {dto.ManufactureName} Manufature";
+        }
+
+
+        //public static async Task<string> UpdateDataAsync(bl.dto.Manufacturies dto, Guid id)
+        //{
+        //    string sql = $@"
+        //                UPDATE gerald_pcpms_db.dbo.pcpms_Manufature SET 
+        //                 ManufatureName =@ManufatureName
+        //                 ,CategoryID = @CategoryID
+        //                 ,Stock =@Stock, Price = @Price
+        //                 ,Specification = @Specification
+        //                 ,Description = @Description     
+        //                 where Id = {id}";
+
+
+        //    var ret = await bl.DBaccess.ExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+        //    {
+        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@ManufatureName", Value = dto.ManufactureName},
+        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Specification", Value = dto.Specification},
+        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoryID", Value = dto.CategotyID},
+        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Price", Value = dto.Price},
+        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Stock", Value = dto.Stock},
+        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = dto.Description}
+        //    });
+
+        //    return $"Succes To Update {ret}";
+        //}
+
+
     }
 }

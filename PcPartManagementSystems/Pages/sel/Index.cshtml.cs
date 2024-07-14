@@ -24,9 +24,11 @@ namespace PcPartManagementSystems.Pages.sel
             // Convert fetched categories to List<Sel>
             sel2 = categories.ConvertAll(c => new bl.model.Sel
             {
-                Id = c.Id.ToString(),         // Convert Guid to string if needed
+                Id = Convert.ToString(c.Id),        
                 text = c.CategoryName,
-              
+                value1 = "",
+                value2 = "",
+                value3 = ""
             });
 
             return new JsonResult(sel2);

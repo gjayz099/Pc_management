@@ -26,22 +26,22 @@
 
         public static async Task<List<bl.model.Manufacturies.ManufacturiesWithCategories>> GetAllAsync()
         {
-            List<bl.model.Manufacturies.ManufacturiesWithCategories> ret;
+       
 
-            ret = await bl.data.Manufaturies.ExecuteQueryAsync();
+            var ret = await bl.data.Manufaturies.ExecuteQueryAsync();
 
-            return ret;
+            return ret.data;
 
         }
 
-        public static async Task<bl.model.Manufacturies.ManufacturiesWithCategories> GetIDAsync(Guid? id)
+        public static async Task<bl.dto.Manufacturies> GetIDAsync(Guid? id)
         {
-            bl.model.Manufacturies.ManufacturiesWithCategories ret;
+            // Fetch manufacturing details using ExecuteQueryIDAsync method
+            bl.dto.Manufacturies ret = await bl.data.Manufaturies.ExecuteQueryIDAsync(id);
 
-            ret = await bl.data.Manufaturies.ExecuteQueryIDAsync(id);
+          
 
             return ret;
-
         }
     }
 

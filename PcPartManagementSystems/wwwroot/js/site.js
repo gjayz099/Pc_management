@@ -89,6 +89,12 @@ function setSelect2ID(url, selector, selectedValue) {
             // Clear existing options in the dropdown
             $(selector).empty();
 
+
+            // Add a placeholder option if no selected value is provided
+            if (!selectedValue) {
+                var placeholderOption = '<option value="" disabled selected> ---Select--- </option>';
+                $(selector).append(placeholderOption);
+            }
             // Populate dropdown with fetched data
             $.each(data, function (index, item) {
                 // Create an option element for each item in the data
@@ -114,47 +120,41 @@ function setSelect2ID(url, selector, selectedValue) {
 }
 
 
+
 function setSelect2Name(url, selector, selectedValue) {
     $.ajax({
-        url: url, // URL to fetch data from
-        method: 'GET', // HTTP method for the request
-        dataType: 'json', // Expected data type of the response
+        url: url,
+        method: 'GET',
+        dataType: 'json',
         success: function (data) {
-            $(selector).empty(); // Clear any existing options in the selector
-
-            // Add the placeholder option
-            var placeholderOption = '<option value="">--Select--</option>';
-            $(selector).append(placeholderOption);
-
-            var isValueSelected = false; // Flag to track if the selectedValue is found in the data
-
-            // Loop through the data to create options
+            console.log('Data fetched:', data); // Log fetched data
+            $(selector).empty();
+            if (!selectedValue) {
+                var placeholderOption = '<option value="" disabled selected> ---Select--- </option>';
+                $(selector).append(placeholderOption);
+            }
+            // Populate dropdown with fetched data
             $.each(data, function (index, item) {
+                // Create an option element for each item in the data
                 var option = '<option value="' + item.id + '">' + item.text + '</option>';
-                // Check if the current item matches the selectedValue
-                if (item.text === selectedValue) {
+
+                // Check if selectedValue matches item.id and mark as selected
+                if (selectedValue != null && item.text === selectedValue) {
                     option = '<option value="' + item.id + '" selected="selected">' + item.text + '</option>';
-                    isValueSelected = true; // Mark the selectedValue as found
                 }
-                $(selector).append(option); // Append the option to the selector
+
+                // Append the option to the dropdown
+                $(selector).append(option);
             });
 
-            // If the selected value was not found, select the placeholder option
-            if (!isValueSelected) {
-                $(selector).val(''); // Select the placeholder option
-            }
-
-            $(selector).trigger('change'); // Trigger change event to update the select2 plugin
+            // Re-initialize Select2 to reflect the changes
+            $(selector).trigger('change');
         },
         error: function (xhr, status, error) {
-            console.error('Error fetching data:', error); // Log any error that occurs during the AJAX request
+            console.error('Error fetching data:', error);
         }
     });
 }
-
-
-
-
 
 // Function to set Select2 options after fetching data via AJAX
 

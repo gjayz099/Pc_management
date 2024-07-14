@@ -4,22 +4,18 @@ CREATE TABLE pcpms_categories (
     -- Other columns of your table
 );
 
-CREATE TABLE pcpms_parts (
-    Id uniqueidentifier PRIMARY KEY,
-    ManufacturerID NVARCHAR(50) NULL,
-    Specifications NVARCHAR(150) NULL,
-    Description NVARCHAR(150) NULL,
-);
 
-CREATE TABLE pcpms_Manufature (
+
+  CREATE TABLE pcpms_Manufature (
     Id uniqueidentifier PRIMARY KEY,
 	ManufatureName  NVARCHAR(50) NULL,
-	CategoryID NVARCHAR(50) NULL,
+	CategoryID uniqueidentifier NULL,
 	Stock int NULL,
 	Price Decimal(10, 2) NULL,
+	Specification NVARCHAR(250) NULL,
+    Description NVARCHAR(250) NULL,
 
 );
-
 
 CREATE TABLE pcpms_sale (
     Id uniqueidentifier PRIMARY KEY,

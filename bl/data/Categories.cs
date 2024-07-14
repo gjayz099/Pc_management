@@ -11,7 +11,7 @@
              string sqlSelectAll = $@"
                 SELECT
                     Id
-                    ,CategoiesName
+                    ,CategoriesName
                 FROM {bl.refs.Databse_DB}.dbo.pcpms_categories";
 
             var ret = await bl.DBaccess.RawSqlQueryAsync(sqlSelectAll, x => new bl.model.Categories
