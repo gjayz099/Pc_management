@@ -92,23 +92,25 @@ function setSelect2ID(url, selector, selectedValue) {
 
             // Add a placeholder option if no selected value is provided
             if (!selectedValue) {
-                var placeholderOption = '<option value="" disabled selected> ---Select--- </option>';
+                var placeholderOption = '<option  class="form-control" value="" disabled selected> ---Select--- </option>';
                 $(selector).append(placeholderOption);
             }
             // Populate dropdown with fetched data
             $.each(data, function (index, item) {
                 // Create an option element for each item in the data
-                var option = '<option value="' + item.id + '">' + item.text + '</option>';
+                var option = '<option  class="form-control" value="' + item.id + '">' + item.text + '</option>';
 
                 // Check if selectedValue matches item.id and mark as selected
                 if (selectedValue != null && item.id === selectedValue) {
-                    option = '<option value="' + item.id + '" selected="selected">' + item.text + '</option>';
+                    option = '<option  class="form-control"  value="' + item.id + '" selected="selected">' + item.text + '</option>';
                 }
 
                 // Append the option to the dropdown
                 $(selector).append(option);
             });
 
+
+     
             // Trigger change event to update Select2 UI
             $(selector).trigger('change');
         },

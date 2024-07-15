@@ -1,9 +1,4 @@
-﻿using bl.model;
-using Microsoft.Data.SqlClient;
-using Microsoft.SqlServer.Management.Smo;
-using System.Reflection.Metadata;
-
-namespace bl.data
+﻿namespace bl.data
 {
     public class Manufaturies
     {
@@ -17,7 +12,7 @@ namespace bl.data
 	                ,mtr.Price
 	                ,mtr.Stock
 	                ,mtr.Description
-                    FROM {bl.refs.Databse_DB}.dbo.pcpms_Manufature mtr
+                    FROM {bl.refs.Databse_DB}.dbo.pcpms_manufature mtr
                     JOIN {bl.refs.Databse_DB}.dbo.pcpms_categories ctr ON ctr.Id = mtr.CategoryID";
 
         public static async Task<(bool err, string stauts, List<bl.model.Manufacturies.ManufacturiesWithCategories> data)> ExecuteQueryAsync()
@@ -52,7 +47,7 @@ namespace bl.data
                         Price,
                         Stock,
                         Description
-                    FROM {bl.refs.Databse_DB}.dbo.pcpms_Manufature
+                    FROM {bl.refs.Databse_DB}.dbo.pcpms_manufature
                     WHERE Id = @Id";
             var par = new List<Microsoft.Data.SqlClient.SqlParameter>
             {
@@ -81,22 +76,22 @@ namespace bl.data
 
         public static async Task<string> InsertDataAsync(bl.dto.Manufacturies dto)
         {
-            string sql = $@"INSERT INTO {bl.refs.Databse_DB}.dbo.pcpms_Manufature
+            string sql = $@"INSERT INTO {bl.refs.Databse_DB}.dbo.pcpms_manufature
                             (    
-                                Id
-                                ,ManufatureName
-                                ,Specification
-                                ,CategoryID
+                             Id
+                             ,ManufatureName
+                             ,Specification
+                             ,CategoryID
                              ,Price
                              ,Stock
                              ,Description
                             )
                             VALUES
                             (
-                                NEWID()
-                                ,@ManufatureName
-                                ,@Specification
-                                ,@CategoryID
+                             NEWID()
+                             ,@ManufatureName
+                             ,@Specification
+                             ,@CategoryID
                              ,@Price
                              ,@Stock
                              ,@Description
@@ -113,34 +108,38 @@ namespace bl.data
             });
 
 
-            return $"Add {ret} Data {dto.ManufactureName} Manufature";
+            return $"Succes To Insert {ret} Data {dto.ManufactureName} Manufature";
         }
 
 
-        //public static async Task<string> UpdateDataAsync(bl.dto.Manufacturies dto, Guid id)
-        //{
-        //    string sql = $@"
-        //                UPDATE gerald_pcpms_db.dbo.pcpms_Manufature SET 
-        //                 ManufatureName =@ManufatureName
-        //                 ,CategoryID = @CategoryID
-        //                 ,Stock =@Stock, Price = @Price
-        //                 ,Specification = @Specification
-        //                 ,Description = @Description     
-        //                 where Id = {id}";
+        public static async Task<string> UpdateDataAsync(bl.dto.Manufacturies dto, Guid id)
+        {
+            string sql = $@"
+                        UPDATE gerald_pcpms_db.dbo.pcpms_manufature SET 
+                         ManufatureName = @ManufatureName
+                         ,CategoryID = @CategoryID
+                         ,Stock =@Stock
+                         ,Price = @Price
+                         ,Specification = @Specification
+                         ,Description = @Description
+                         where Id = '{id}'";
 
 
-        //    var ret = await bl.DBaccess.ExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
-        //    {
-        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@ManufatureName", Value = dto.ManufactureName},
-        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Specification", Value = dto.Specification},
-        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoryID", Value = dto.CategotyID},
-        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Price", Value = dto.Price},
-        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Stock", Value = dto.Stock},
-        //        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = dto.Description}
-        //    });
+            var ret = await bl.DBaccess.ExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@ManufatureName", Value = dto.ManufactureName},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Specification", Value = dto.Specification},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoryID", Value = dto.CategotyID},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Price", Value = dto.Price},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Stock", Value = dto.Stock},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = (object)dto.Description ??  DBNull.Value}
+            });
 
-        //    return $"Succes To Update {ret}";
-        //}
+        
+
+
+            return $"Succes To Update {ret} Data {dto.ManufactureName} Manufature";
+        }
 
 
     }

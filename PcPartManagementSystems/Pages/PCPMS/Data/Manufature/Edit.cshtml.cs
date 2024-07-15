@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
-using System.Threading.Tasks;
 
 namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
 {
@@ -15,7 +13,7 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
 
         public async Task<IActionResult> OnGet()
         {
-            if (Id == Guid.Empty)
+            if (Id == null || Id == Guid.Empty)
             {
                 return Page();
             }
@@ -26,28 +24,39 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
             return Page();
         }
 
-        //public async Task<IActionResult> OnPostSaveData()
-        //{
-         
-        //    if (Id != Guid.Empty)
-        //    {
-        //        error = await bl.dto.Manufacturies.UpdateData(dto, Id);
-        //        if (!string.IsNullOrEmpty(error))
-        //        {
-        //            TempData[bl.refs.ErrorMessage] = error;
-        //            return RedirectToPage();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        error = await bl.dto.Manufacturies.InsertData(dto);
-              
-        //    }
+        public async Task<IActionResult> OnPostSaveData()
+        {
 
-      
+            if (Id != null && Id != Guid.Empty)
+            {
+                error = await bl.dto.Manufacturies.UpdateData(dto, Id.Value);
 
-        //    return RedirectToPage("/PCPMS/Data/Manufature/Index"); // Redirect to the list page after successful save
-        //}
+                if (!string.IsNullOrEmpty(error))
+                {
+                    TempData[bl.refs.ErrorMessage] = error;
+                    return Page();
+                }
+                TempData[bl.refs.SeccessMessage] = $@"{dto.ManufactureName} successfully Update!";
+            }
+            else
+            {
+                error = await bl.dto.Manufacturies.InsertData(dto);
+
+                if (!string.IsNullOrEmpty(error))
+                {
+                    TempData[bl.refs.ErrorMessage] = error;
+                    return Page();
+                }
+                TempData[bl.refs.SeccessMessage] = $@"{dto.ManufactureName} successfully inserted!";
+            }
+
+            return RedirectToPage("/PCPMS/Data/Manufature/Index");
+
+
+
+
+ 
+        }
 
     }
 }

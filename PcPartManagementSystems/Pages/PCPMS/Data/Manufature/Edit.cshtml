@@ -1,11 +1,21 @@
 ﻿@page "{Id?}"
-@using System.Globalization
 @model PcPartManagementSystems.Pages.PCPMS.Data.Manufature.EditModel
+@{
+    if (Model.Id != null && Model.Id != Guid.Empty)
+    {
+        ViewData["Title"] = bl.menu.mnu.Menu_Name_Manufature + " Edit";
+    }
+    else
+    {
+        ViewData["Title"] = bl.menu.mnu.Menu_Name_Manufature + " Create";
+    }
+
+}
 
 @section Topbar {
     <div class="py-2 me-3">
-        <a href="/PCPMS/Data/Manufature" class="btn btn-secondary">Back</a>
-        <button type="submit" form="editForm" class="btn btn-primary" asp-page-handler="SaveData">Save</button>
+        <a href="/PCPMS/Data/Manufature" class="btn btn-secondary" onclick="return BtnClick()">Back</a>
+        <button type="submit" form="editForm" class="btn btn-primary" asp-page-handler="SaveData" onclick="return BtnClick()">Save</button>
     </div>
 }
 
@@ -18,31 +28,31 @@
                     <tr class="row">
                         <td class="form-group col-6">
                             <label asp-for="dto.ManufactureName" class="pb-1">Manufacture</label>
-                            <input asp-for="dto.ManufactureName" class="form-control" />
+                            <input asp-for="dto.ManufactureName" class="form-control" autocomplete="off" />
                         </td>
                         <td class="form-group col-6">
                             <label asp-for="dto.CategotyID" class="pb-1">Category</label>
-                            <select id="dropdownCategory" class="form-control" asp-for="dto.CategotyID"></select>
+                            <select id="dropdownCategory" class="form-control mt-5 mb-5 pt-5 pb-5" asp-for="dto.CategotyID"></select>
                         </td>
                     </tr>
                     <tr class="row">
                         <td class="form-group col-6">
                             <label asp-for="dto.Specification" class="pb-1">Specification</label>
-                            <input asp-for="dto.Specification" class="form-control" />
+                            <input asp-for="dto.Specification" class="form-control" autocomplete="off" />
                         </td>
                         <td class="form-group col-6">
                             <label asp-for="dto.Stock" class="pb-1">Stock</label>
-                            <input asp-for="dto.Stock" class="form-control" />
+                            <input asp-for="dto.Stock" class="form-control" autocomplete="off" />
                         </td>
                     </tr>
                     <tr class="row">
                         <td class="form-group col-6">
                             <label asp-for="dto.Price" class="pb-1">Price</label>
-                            <input asp-for="dto.Price" class="form-control text-end" value="@Model.dto?.Price.ToString("N2")" />
+                            <input asp-for="dto.Price" class="form-control text-end" value="@Model.dto?.Price.ToString("N2")" autocomplete="off"/>
                         </td>
                         <td class="form-group col-6">
                             <label asp-for="dto.Description" class="pb-1">Description</label>
-                            <input asp-for="dto.Description" class="form-control" />
+                            <input asp-for="dto.Description" class="form-control" autocomplete="off" />
                         </td>
                     </tr>
                 </tbody>
@@ -57,17 +67,22 @@
 
 @section Scripts {
     <script type="text/javascript">
+
         $(document).ready(function () {
+      
             // Initialize Select2
             $("#dropdownCategory").select2({
                 theme: 'bootstrap',
-                placeholder: '--Select--'
+                placeholder: '--Select--',
+                allowClear: true,  // Allows the placeholder to be shown after a selection is made
+                closeOnSelect: false,
+                selectionCssClass: 'select2--large',
+                dropdownCssClass: 'select2--large',
+                
             });
 
             var selectedValue = '@Model.dto?.CategotyID'; // Using null conditional operator
 
-
-            console.log(selectedValue)
 
             setSelect2ID('/sel/?handler=AllCategory', '#dropdownCategory', selectedValue);
         
