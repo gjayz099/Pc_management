@@ -2,11 +2,17 @@
 {
     public class Sales
     {
-        public string PartsID { get; set; }
-        public string QuantitySold { get; set; }
-        public string UnitPrice { get; set; }
-        public string TotalPrice { get; set; }
-        public string CustomerName { get; set; }
+        public Guid PartsID { get; set; } //// Manufature DB
+        public int QuantitySold { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal TotalPrice
+        {
+            get
+            {
+                return QuantitySold * UnitPrice;
+            }
+        }
+        public Guid CustomerID { get; set; } ///// user DB
         public DateTime DateSale { get; set; }
     }
 }

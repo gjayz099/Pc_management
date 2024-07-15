@@ -9,7 +9,10 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
         [BindProperty] List<bl.model.Manufacturies.ManufacturiesWithCategories> ret {  get; set; }
         public IActionResult OnGet()
         {
+
+            bl.sys.Acceslog("Access", "User-Gjayz", "Accses-" + bl.menu.mnu.Menu_Name_Manufature);
             return Page();
+
         }
         public async Task<IActionResult> OnGetDisplayData()
         {

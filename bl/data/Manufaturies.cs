@@ -73,7 +73,6 @@
         }
 
 
-
         public static async Task<string> InsertDataAsync(bl.dto.Manufacturies dto)
         {
             string sql = $@"INSERT INTO {bl.refs.Databse_DB}.dbo.pcpms_manufature

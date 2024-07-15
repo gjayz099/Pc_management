@@ -26,8 +26,6 @@
 
         public static async Task<List<bl.model.Manufacturies.ManufacturiesWithCategories>> GetAllAsync()
         {
-       
-
             var ret = await bl.data.Manufaturies.ExecuteQueryAsync();
 
             return ret.data;

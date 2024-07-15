@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-reboot.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap-utilities.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/datatable-bootstrap/dataTables.bootstrap5.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/respo-datatable/Responsive.dataTables.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/select2-bootstrap/select2-bootstrap.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib//select2-bootstrap/select2-bootstrap-5-theme.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css" asp-append-version="true" />
@@ -89,7 +90,7 @@
                         @foreach (var menu in bl.menu.mnu.mnuMenuList)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-black" asp-page="@menu.Url">
+                                <a class="nav-link text-black" asp-page="@menu.Url" onclick="return BtnClick()">
                                     <span class="nav-icon"><span class="bx bxs-dashboard"></span></span>@menu.Name
                                 </a>
                             </li>

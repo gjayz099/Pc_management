@@ -13,6 +13,8 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
 
         public async Task<IActionResult> OnGet()
         {
+
+     
             if (Id == null || Id == Guid.Empty)
             {
                 return Page();

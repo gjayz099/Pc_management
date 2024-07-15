@@ -5,8 +5,21 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Sale
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
+
+        [BindProperty] public List<bl.model.Sales.SaleWithCustomer> ret { get; set; }
+
+        public IActionResult OnGet()
         {
+            bl.sys.Acceslog("Access", "User-Gjayz", "Accses-" + bl.menu.mnu.Menu_Name_Sale);
+            return Page();
+       
+        }
+
+        public async Task<IActionResult> OnGetDisplayData()
+        {
+            ret = await bl.model.Sales.GetAllAsync();
+
+            return new JsonResult(ret);
         }
     }
 }
