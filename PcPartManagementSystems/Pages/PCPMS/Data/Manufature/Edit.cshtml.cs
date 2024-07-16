@@ -17,12 +17,12 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
             var _ps = new _session();
             if (!_ps.IsUserLoggedIn(HttpContext)) { return RedirectToPage("/Index"); }
 
-            if (Id == null || Id == Guid.Empty) {return RedirectToPage(); }
+            if (Id == null || Id == Guid.Empty) {return Page(); }
 
             dto = await bl.model.Manufacturies.GetIDAsync(Id);
 
 
-            return RedirectToPage();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostSaveData()
