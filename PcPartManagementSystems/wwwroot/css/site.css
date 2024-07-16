@@ -1,103 +1,4 @@
 
-body{
-    z-index: 1;
-}
-
-
-.hamburger_menu .bx {
-    font-size: 20px
-}
-.btn-dropdown {
-    border: none;
-    font-size: 30px;
-    cursor: pointer
-}
-.main_container {
-    display: flex;
-    overflow: hidden;
-}
-
-.fixed_column1 {
-    /* Example fixed width */
-    width: 200px;
-    /* Optionally, to prevent columns from shrinking */
-    flex-shrink: 0;
-}
-
-.fixed_column2 {
-    /* Allow column to grow and shrink based on content */
-    flex: 1;
-    /* Optionally, add padding or margin to create space between columns */
-}
-/* Sidebar CSS */
-.sidebar {
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 280px; /* Initial width of sidebar */
-    background-color: #f8f9fa;
-    transition: 0.5s ease-in-out;
-    overflow-y: auto;
-}
-
-
-.showsidebar {
-    width: 0;
-    position: absolute;
-    transition: 0.5s ease-in-out;
-}
-
-/* Hamburger menu for small screens */
-@media (max-width: 991px) {
-    .sidebar {
-        width: 0;
-    }
-
-    .fixed_column2 {
-        margin-left: 0;
-    }
-
-    .sidebar.show {
-        width: 280px;
-    }
-
-    .main_container {
-        display: block;
-    }
-
-}
-
-
-/* Navbar adjustments */
-.navbar {
-    z-index: 1000; /* Ensure navbar is on top of sidebar */
-}
-
-
-
-/* Sidebar toggle button styles */
-.sidebar-toggler {
-    background-color: transparent;
-    border: none;
-    cursor: pointer;
-}
-
-.sidebar-toggler:focus {
-    outline: none;
-}
-
-
-
-
-.modal-header-error {
-    background: #ff5d5d;
-    border-radius: 5px 5px 0 0; 
-    height: 40px
-}
-tbody, td, tfoot, th, thead, tr {
-    border-style: none;
-}
-
 
 /* --------- Form ----------- */
 .conlogin {
@@ -136,5 +37,8 @@ tbody, td, tfoot, th, thead, tr {
     width: 150px;
     align-items: center;
     margin: auto;
+}
+.navbar-expand .navbar-nav .dropdown-menu {
+    left: -150px;
 }
 

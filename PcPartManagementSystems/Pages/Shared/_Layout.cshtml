@@ -25,13 +25,9 @@
     <link rel="stylesheet" href="~/lib/sweetalert2/sweetalert2.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/jquery-ui/jquery-ui.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/owl-carousel/owl.carousel.min.css" asp-append-version="true" />
-  
-    <link rel="stylesheet" href="~/lib/coreui/coreui.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/adminlte/adminlte.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" asp-append-version="true">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-
-
-
 
 
     <style>
@@ -69,117 +65,164 @@
 
 
 </head>
-<body>
+<body class="wrapper">
 
-   
-    <div class="main_container">
-        @if (userLogin)
-        {
-            <div class="sidebar border-end fixed_column1">
-                <div class="sidebar-header border-bottom text-center">
-                    <div class="sidebar-brand ">PC Part Management Systems</div>
+    @if (userLogin)
+    {
+        <!-- Navbar -->
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light py-0">
+            <!-- Left navbar links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="bx bx-menu"></i></a>
+                </li>
+
+            </ul>
+            <!-- Right navbar links -->
+            <ul class="navbar-nav ml-auto">
+
+
+                <div id="dropdown" class="bg-transparent dropdown navbar-nav ms-auto m-0 pe-3">
+                    <a id="dropdown-toggle" class="btn-dropdown text-black dropdown-show" data-coreui-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-user-circle"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-start text-left">
+                        <li><a class="dropdown-item" href="/Logout">Logout</a></li>
+                    </ul>
                 </div>
-                <ul class="sidebar-nav">
-                    <li class="nav-title">Main navbar</li>
-                    <li class="nav-item">
-                        <a class="nav-link text-black" asp-area="" asp-page="/PCPMS/Dashboard/Index" onclick="return BtnClick()">
-                            <i class="nav-icon bx bxs-dashboard"></i>Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-black" href="#">
-                            <i class="nav-icon bx bxs-dashboard"></i> With badge
-                            @*<span class="badge bg-primary ms-auto">NEW</span> *@
-                        </a>
-                    </li>
-                    <li class="nav-item nav-group">
-                        <a class="nav-link nav-group-toggle text-black">
-                            <i class="nav-icon bx bxs-dashboard"></i> All Data
-                        </a>
-                        <!-- Example of dynamic menu items -->
 
-                        <ul class="nav-group-items">
+            </ul>
+        </nav>
+        <!-- /.navbar -->
+    }
 
-                            @foreach (var menu in bl.menu.mnu.mnuMenuList)
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-black" asp-page="@menu.Url" onclick="return BtnClick()">
-                                        <span class="nav-icon"><span class="bx bxs-dashboard"></span></span>@menu.Name
-                                    </a>
-                                </li>
+ @if (userLogin)
+    {
+        <!-- Main Sidebar Container -->
+        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+            <!-- Sidebar -->
+        <div class="sidebar">
+            <!-- Brand Logo -->
+            <a href="index3.html" class="brand-link">
+                <img src="dist/img/AdminLTELogo.png" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                <span class="brand-text font-weight-light">AdminLTE 3</span>
+            </a>
 
-                            }
 
-                        </ul>
-                    </li>
-
-                    <li class="nav-item nav-group">
-                        <a class="nav-link nav-group-toggle text-black">
-                            <i class="nav-icon bx bxs-dashboard"></i> Nav dropdown
-                        </a>
-                        <ul class="nav-group-items">
-                            <li class="nav-item">
-                                <a class="nav-link text-black" href="#">
-                                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Nav dropdown item
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-black" href="#">
-                                    <span class="nav-icon"><span class="nav-icon-bullet"></span></span> Nav dropdown item
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-                <div class="sidebar-footer border-top d-flex">
-                    <button class="sidebar-toggler" type="button"></button>
-                </div>
-            </div>
-        }
-        @*--------------- Sidebar -------------*@
         
 
-        <div class="fixed_column2">
-            @*-------- navbar ----------------*@
-            @if (userLogin)
-            {
-                <nav class="navbar navbar-expand-lg bg-body-tertiary p-0">
-                    <div class="container-fluid">
-                        <div class="hamburger_menu">
-                            <i class='text-black bx bx-menu'></i>
-                        </div>
-                        <div class="bg-transparent dropdown navbar-nav ms-auto m-0 pe-3">
-                            <a class="btn-dropdown text-black" data-coreui-toggle="dropdown" aria-expanded="false">
-                                <i class='bx bx-user-circle'></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li><a class="dropdown-item" href="#">Logout</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </nav>
-            }
-           
-            <div class="Topbar">
-                @await RenderSectionAsync("Topbar", required: false)
-            </div>
-            <div class="body flex-grow-1
+            <!-- Sidebar Menu -->
+            <nav class="mt-2">
+                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                    <!-- Add icons to the links using the .nav-icon class
+                         with font-awesome or any other icon font library -->
 
-              
-                <main role="main">
-
-                    @* // Loading/ *@
-                    <div id="dvLoading">
-                        <img src="~/img/LoadLogo.jpg" alt="Alternate Text" />
-                    </div>
-
-                    @RenderBody()
-
-
-                </main>
-            </div>
+                   <!-- Dashboard-->
+                    <li class="nav-item">
+                        <a href="pages/widgets.html" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Dashboard
+                                <span class="right badge badge-danger">New</span>
+                            </p>
+                        </a>
+                    </li>
+                   
+                    <!-- Dashboard-->
+                    <!-- extra-->
+                    <li class="nav-item">
+                        <a href="pages/widgets.html" class="nav-link">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Dashboard
+                                <span class="right badge badge-danger">New</span>
+                            </p>
+                        </a>
+                    </li>
+                    <!-- extra-->
+                    <!-- Data -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-copy"></i>
+                            <p>
+                                Layout Options
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right">6</span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/layout/top-nav.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Top Navigation</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Top Navigation + Sidebar</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Data -->
+                    <!-- Report -->
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-copy"></i>
+                            <p>
+                                Layout Options
+                                <i class="fas fa-angle-left right"></i>
+                                <span class="badge badge-info right">6</span>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="pages/layout/top-nav.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Top Navigation</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Top Navigation + Sidebar</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!-- Report -->
+                </ul>
+            </nav>
+            <!-- /.sidebar-menu -->
         </div>
+        <!-- /.sidebar -->
+    </aside>
+    }
+
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <div class="content-header">
+
+            <main role="main">
+
+                @* // Loading/ *@
+                <div id="dvLoading">
+                    <img src="~/img/LoadLogo.jpg" alt="Alternate Text" />
+                </div>
+
+                @RenderBody()
+
+
+            </main>
+        </div>
+        <!-- /.content-header -->
+        <!-- /.content -->
     </div>
+
+
+  
 
 
 
@@ -188,10 +231,10 @@
     <partial name="_SuccessMessage" />
 
 
-
     <script src="~/lib/jquery/jquery-3.7.1.min.js" asp-append-version="true"></script>
     <script src="~/lib/jquery/dist/jquery.js" asp-append-version="true"></script>
     <script src="~/lib/jquery-ui/jquery-ui.min.js" asp-append-version="true"></script>
+    <script src="~/lib/adminlte/adminlte.min.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.js" asp-append-version="true"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap-5-3-0.js" asp-append-version="true"></script>
     <script src="~/lib/select2/select2.min.js" asp-append-version="true"></script>
@@ -200,7 +243,7 @@
     <script src="~/lib/owl-carousel/owl.carousel.min.js" asp-append-version="true"></script>
     <script src="~/lib/momentjs/moment.min.js" asp-append-version="true"></script>
     <script src="~/lib/sweetalert2/sweetalert2.all.min.js" asp-append-version="true"></script>
-    <script src="~/lib/coreui/coreui.bundle.min.js" asp-append-version="true"></script>
+  
     <script src="~/js/site.js" asp-append-version="true"></script>
 
 

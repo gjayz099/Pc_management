@@ -12,11 +12,6 @@ $(document).ready(function () {
         $(this).next('.nav-group-items').slideToggle();
     });
 
-    // Toggle sidebar visibility on hamburger_menu click
-    $('.hamburger_menu').click(function () {
-        $('.sidebar').toggleClass('showsidebar');
-    });
-
     // on click hide modal
     $('.back-button').click(function () {
         $('.Modal_error').hide()
@@ -27,6 +22,26 @@ $(document).ready(function () {
     $('#ErrorShowModalHide').click(function () {
         $('#ErrorShowModal').modal('hide');
     })
+
+
+
+    $('#dropdown-toggle').click(function (e) {
+        e.preventDefault(); // Prevent default anchor behavior
+
+        var currentState = $(this).attr('aria-expanded');
+
+        // Toggle aria-expanded attribute
+        if (currentState === 'true') {
+            $(this).attr('aria-expanded', 'false');
+        } else {
+            $(this).attr('aria-expanded', 'true');
+        }
+
+        // Optionally, toggle the visibility of the dropdown menu
+        var dropdownMenu = $(this).next('.dropdown-menu');
+        dropdownMenu.toggle(); // Toggle visibility of the dropdown menu
+    });
+  
 
 });
 
