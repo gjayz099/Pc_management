@@ -1,12 +1,57 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = bl.refs.Login;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    .Topbar{
+        display: none;
+    }
+
+</style>
+
+<div class="conlogin">
+    <div class="container-login ">
+        <div class="card">
+            <form method="post">
+                <div class="loginlogo">
+                    <img src="/img//loginlogo.png" alt="Alternate Text" />
+                </div>
+                <div class="form-group py-2 px-4 login-input">
+                    <label class="py-1"></label>
+                    <input type="text" class="form-control text-black" placeholder="Username" autocomplete="off" asp-for="dto.Username">
+
+                </div>
+                <div class="form-group py-2 px-4 login-input">
+                    <label class="py-1"></label>
+                    <input type="password" class="form-control text-black" placeholder="Password" autocomplete="off" asp-for="dto.Password">
+
+                </div>
+                <div class="pt-4 pb-4 m-auto text-center">
+                    <button type="submit" class="btn btn-primary w-50" asp-page-handler="UserLogin">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
 </div>
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+         $(document).ready(function () {
+            var errorMessage = "@Html.Raw(TempData[bl.refs.ErrorMessageLogin] as string)";
+            if (errorMessage) {
+                Swal.fire({
+                    title: "Error Login",
+                    text: errorMessage,
+                    icon: "error"
+                });
+            }
+         })
+    </script>
+}
 
 

@@ -17,6 +17,8 @@
             return Logpath;
         }
 
+
+    
         /// <summary>
         /// Writes a log entry to the log file.
         /// </summary>

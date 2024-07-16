@@ -14,16 +14,15 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
         public async Task<IActionResult> OnGet()
         {
 
-     
-            if (Id == null || Id == Guid.Empty)
-            {
-                return Page();
-            }
+            var _ps = new _session();
+            if (!_ps.IsUserLoggedIn(HttpContext)) { return RedirectToPage("/Index"); }
+
+            if (Id == null || Id == Guid.Empty) {return RedirectToPage(); }
 
             dto = await bl.model.Manufacturies.GetIDAsync(Id);
 
 
-            return Page();
+            return RedirectToPage();
         }
 
         public async Task<IActionResult> OnPostSaveData()

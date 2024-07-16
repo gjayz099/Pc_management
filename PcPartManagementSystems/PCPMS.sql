@@ -4,7 +4,7 @@ CREATE TABLE pcpms_categories (
     -- Other columns of your table
 );
 
-  CREATE TABLE pcpms_Manufature (
+  CREATE TABLE pcpms_manufature (
     Id uniqueidentifier PRIMARY KEY,
 	ManufatureName  NVARCHAR(50) NULL,
 	CategoryID uniqueidentifier NULL,
@@ -26,19 +26,32 @@ CREATE TABLE pcpms_sale (
 );
 
 
-CREATE TABLE pcpms_User (
+CREATE TABLE pcpms_user (
     Id uniqueidentifier PRIMARY KEY,
 	Firstname NVARCHAR(250) NULL,
 	Lastname NVARCHAR(250) NULL,
     Age Int NULL,
     Username NVARCHAR(250) NULL, 
     Password NVARCHAR(250) NULL,
-    LeavingId uniqueidentifier NULL,
+    regionsId uniqueidentifier NULL,
+    provincesId uniqueidentifier NULL,
+    cityId uniqueidentifier NULL,
 );
 
-CREATE TABLE pcpms_Leaving (
+CREATE TABLE pcpms_regions (
     Id uniqueidentifier PRIMARY KEY,
 	Regions NVARCHAR(250) NULL,
-	Provinces NVARCHAR(250) NULL,
-    City NVARCHAR(250) NULL,
 );
+CREATE TABLE pcpms_provinces (
+    Id uniqueidentifier PRIMARY KEY,
+	Provinces NVARCHAR(250) NULL,
+    RegionsId uniqueidentifier NULL
+);
+CREATE TABLE pcpms_city (
+    Id uniqueidentifier PRIMARY KEY,
+    City NVARCHAR(250) NULL,
+    ProvincesId uniqueidentifier NULL
+);
+
+
+

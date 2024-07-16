@@ -11,8 +11,9 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Categories
         [BindProperty] public bl.dto.Categories dto { get; set; }
         public IActionResult OnGet()
         {
-
-            bl.sys.Acceslog("Access", "User-Gjayz", "Accses-" +bl.menu.mnu.Menu_Name_Category);
+            var _ps = new _session();
+            if (!_ps.IsUserLoggedIn(HttpContext)) { return RedirectToPage("/Index"); }
+            bl.sys.Acceslog("Access", "User-Gjayz", "Accses-" + bl.menu.mnu.Menu_Name_Category);
             return Page();
         }
 

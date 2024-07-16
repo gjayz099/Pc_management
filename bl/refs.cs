@@ -3,6 +3,10 @@
     public class refs
     {
 
+        ///Login And Signup
+        public const string Login = "Login";
+        public const string Signup = "SignUp";
+
         /// Static Project Name 
         public static string ProjectName = "PCRMS";
 
@@ -12,6 +16,7 @@
 
         // Static strings for various popups and notifications
         public static string ErrorMessage = "ErrorMsg";
+        public static string ErrorMessageLogin = "ErrorMsgLogin";
         public static string SeccessMessage = "SeccessMsg";
         public static string ConfirmMessage = "ConfirmMsg";
         public static string ConfirmWarningMessage = "ConfirmWarningMsg";
