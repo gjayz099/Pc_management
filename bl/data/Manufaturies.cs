@@ -12,6 +12,7 @@
 	                ,mtr.Price
 	                ,mtr.Stock
 	                ,mtr.Description
+                    ,mtr.PictureName
                     FROM {bl.refs.Databse_DB}.dbo.pcpms_manufature mtr
                     JOIN {bl.refs.Databse_DB}.dbo.pcpms_categories ctr ON ctr.Id = mtr.CategoryID";
 
@@ -31,6 +32,7 @@
                 Price = (x[4] == DBNull.Value) ? 0 : (decimal)x[4],
                 Stock = (x[5] == DBNull.Value) ? 0 : (int)x[5],
                 Description = (x[6] == DBNull.Value) ? string.Empty : (string)x[6],
+                PictureName = (x[7] == DBNull.Value) ? string.Empty : (string)x[7],
             });
 
             // Return the list of manufacturers with categories
@@ -73,7 +75,7 @@
         }
 
 
-        public static async Task<string> InsertDataAsync(bl.dto.Manufacturies dto)
+        public static async Task<string> InsertDataAsync(bl.dto.Manufacturies dto, string pictureFileName)
         {
             string sql = $@"INSERT INTO {bl.refs.Databse_DB}.dbo.pcpms_manufature
                             (    
@@ -84,6 +86,7 @@
                              ,Price
                              ,Stock
                              ,Description
+                             ,PictureName
                             )
                             VALUES
                             (
@@ -94,6 +97,7 @@
                              ,@Price
                              ,@Stock
                              ,@Description
+                             ,@PictureName
                             )";
 
             int ret = await bl.DBaccess.OldExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
@@ -103,7 +107,8 @@
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoryID", Value = dto.CategotyID},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Price", Value = dto.Price},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Stock", Value = dto.Stock},
-                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = dto.Description}
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = (object)dto.Description ??  DBNull.Value},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@PictureName", Value = pictureFileName}
             });
 
 

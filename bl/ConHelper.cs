@@ -41,6 +41,22 @@ namespace bl
             return Myport;
         }
 
+
+        public static ConfigValue SavefileImg()
+        {
+            // Retrieve a configuration value for the key "picture".
+            string _SaveIMG = GetString("picture");
+
+            // Create a new instance of ConfigValue and assign the retrieved value to its SaveImg property.
+            ConfigValue SaveIMG = new ConfigValue
+            {
+                SaveImg = _SaveIMG,
+            };
+
+            // Return the configured ConfigValue object.
+            return SaveIMG;
+        }
+
         // Method to construct and return the connection string
         public static string ConnectionConfiguration()
         {
@@ -104,6 +120,7 @@ namespace bl
             public string DBUSER { get; set; }    // Property for database username
             public string DBPASS { get; set; }    // Property for database password
             public string Port { get; set; }      // Property for port number
+            public string SaveImg { get; set; }      // Property for port number
         }
     }
 }

@@ -21,7 +21,7 @@
 
 <div class="container-fluid row m-auto pt-5">
     <div class="card col-10 m-auto py-2">
-        <form id="editForm" method="post" >
+        <form id="editForm" method="post" enctype="multipart/form-data">
             <input asp-for="Id" hidden />
             <table class="table table-input-manu">
                 <tbody class="">
@@ -55,6 +55,22 @@
                             <input asp-for="dto.Description" class="form-control" autocomplete="off" />
                         </td>
                     </tr>
+                    @if(Model.Id != null)
+                    {
+                        <tr class="row">
+                            <td class="form-group col-6">
+                                <img src="\img\@Model.dto?.PictureName" />
+                            </td>
+                        </tr>
+                    }else{
+                        <tr class="row">
+                            <td class="form-group col-6">
+                                <label for="PictureFile" asp-for="PictureFile" class="pb-1">Picture</label>
+                                <input type="file" asp-for="PictureFile" class="form-control" />
+                            </td>
+                        </tr>
+                    }
+                  
                 </tbody>
             </table>
         </form>

@@ -11,6 +11,9 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
 
         [BindProperty] public string error { get; set; }
 
+        [BindProperty]
+        public IFormFile PictureFile { get; set; }
+
         public async Task<IActionResult> OnGet()
         {
 
@@ -41,7 +44,7 @@ namespace PcPartManagementSystems.Pages.PCPMS.Data.Manufature
             }
             else
             {
-                error = await bl.dto.Manufacturies.InsertData(dto);
+                error = await bl.dto.Manufacturies.InsertData(dto, PictureFile);
 
                 if (!string.IsNullOrEmpty(error))
                 {

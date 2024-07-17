@@ -78,15 +78,23 @@
                     {
                         title: 'Price',
                         data: 'price',
-                        render: function (data) {
+                        render: function (data, type, row) {
                             return formatCurrency(data)
                         },
                         type: 'money'
                     },
                     {
+                        title: 'Image',
+                        data: 'pictureName',
+                        render: function (data, type, row) {
+                            return FileImg(data)
+                        }
+                    },
+                    {
                         title: 'Description',
                         data: 'description'
                     },
+                   
                 ],
             });
 

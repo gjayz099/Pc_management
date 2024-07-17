@@ -89,7 +89,9 @@ function formatCurrency(amount) {
     return formattedAmount;
 }
 
-////// Select2
+function FileImg(img) {
+    return '<img src="/img/' + img + '" alt="Image" style="width: 50px; height: 50px;"/>';
+}
 
 
 

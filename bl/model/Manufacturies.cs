@@ -9,7 +9,7 @@
         public int Stock { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
-
+        public string PictureName { get; set; }
 
         public class ManufacturiesWithCategories
         {
@@ -20,6 +20,7 @@
             public int Stock { get; set; }
             public decimal Price { get; set; }
             public string Description { get; set; }
+            public string PictureName { get; set; }
 
         }
 
