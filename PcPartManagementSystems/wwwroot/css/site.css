@@ -47,3 +47,21 @@
     padding: 5px 10px;
     border-radius: 50px;
 }
+
+.info-box {
+    position: relative;
+    height: 120px;
+    margin: auto;
+    width: 350px;
+}
+.info-box-icon {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+}
+.table-input-manu tbody tr td {
+    border-top: none !important;
+    border-bottom: none !important;
+}

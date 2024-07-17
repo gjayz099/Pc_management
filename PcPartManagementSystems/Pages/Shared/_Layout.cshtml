@@ -1,6 +1,4 @@
-﻿
-
-@{
+﻿@{
     var _ps = new _session();
     bool userLogin = _ps.IsUserLoggedIn(Context);
 
@@ -106,46 +104,35 @@
     @if (userLogin)
     {
         <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-dark-primary elevation-4">
+        <aside class="main-sidebar sidebar-light-gray elevation-4">
             <!-- Sidebar -->
         <div class="sidebar">
             <!-- Brand Logo -->
-            <a href="index3.html" class="brand-link">
+                <a asp-page="@bl.menu.mnu.GetNamedta(bl.menu.mnu.Menu_Dashboard)" class="brand-link">
                 <h6 class="text-center">PCPMS</h6>
             </a>
-
-
-        
-
             <!-- Sidebar Menu -->
             <nav class="mt-2">
-                <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                    <!-- Add icons to the links using the .nav-icon class
-                         with font-awesome or any other icon font library -->
-
+                <ul class="nav nav-pills nav-sidebar flex-column my-5" data-widget="treeview" role="menu" data-accordion="false">
                    <!-- Dashboard-->
-                    <li class="nav-item">
-                        <a href="pages/widgets.html" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>
-                                Dashboard
-                                <span class="right badge badge-danger">New</span>
-                            </p>
-                        </a>
-                    </li>
-                   
+                    @foreach(var menu in bl.menu.mnu.mnuMenuMain)
+                    {
+                        if (menu.MenuListUI == null)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-page="@menu.Url">
+                                    <i class="nav-icon fas fa-th"></i>
+                                    <p>
+                                        @menu.Name
+                               
+                                    </p>
+                                </a>
+                            </li>
+                        }
+                          
+                    }                   
                     <!-- Dashboard-->
-                    <!-- extra-->
-                    <li class="nav-item">
-                        <a href="pages/widgets.html" class="nav-link">
-                            <i class="nav-icon fas fa-th"></i>
-                            <p>
-                                Dashboard
-                                <span class="right badge badge-danger">New</span>
-                            </p>
-                        </a>
-                    </li>
-                    <!-- extra-->
+      
                     <!-- Data -->
                     <li class="nav-item">
                         <a href="#" class="nav-link">
@@ -157,16 +144,20 @@
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
+                         
 
-                           @foreach (var menu in bl.menu.mnu.mnuMenuList)
+                           @foreach (var menu in bl.menu.mnu.mnuMenuMain)
                            {
-                                <li class="nav-item">
-                                    <a asp-page="@menu.Url" class="nav-link" onclick="return BtnClick()">
-                                        <i class="fa-solid fa-database"></i>
-                                         <p>@menu.Name</p>
-                                    </a>
-                                </li>
-                            
+
+                                if (menu.MenuListUI == bl.menu.mnu.Menu_Data)
+                                {
+                                     <li class="nav-item">
+                                         <a asp-page="@menu.Url" class="nav-link" onclick="return BtnClick()">
+                                             <i class="fa-solid fa-database"></i>
+                                             <p>@menu.Name</p>
+                                         </a>
+                                     </li>
+                                }
                             }
                         </ul>
                     </li>
@@ -176,24 +167,27 @@
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-copy"></i>
                             <p>
-                                Layout Options
+                                Report
                                 <i class="fas fa-angle-left right"></i>
-                                <span class="badge badge-info right">6</span>
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="pages/layout/top-nav.html" class="nav-link">
-                                    <i class="fa-solid fa-file"></i>
-                                    <p>Top Navigation</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/layout/top-nav-sidebar.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Top Navigation + Sidebar</p>
-                                </a>
-                            </li>
+
+                                @foreach (var menu in bl.menu.mnu.mnuMenuMain)
+                                {
+
+                                    if (menu.MenuListUI == bl.menu.mnu.Menu_Report)
+                                    {
+
+                                   
+                                        <li class="nav-item">
+                                            <a asp-page="@menu.Url" class="nav-link" onclick="return BtnClick()">
+                                                <i class="fa-solid fa-database"></i>
+                                                <p>@menu.Name</p>
+                                            </a>
+                                        </li>
+                                    }
+                                }
                         </ul>
                     </li>
                     <!-- Report -->

@@ -31798,11 +31798,11 @@ a.close.disabled, a.disabled.mailbox-attachment-close {
         align-items: center;
         display: -ms-flexbox;
         display: flex;
-        font-size: 1.875rem;
+        font-size: 2.875rem; /* // change /*/
         -ms-flex-pack: center;
         justify-content: center;
         text-align: center;
-        width: 70px
+        width: 125px; /* // change /*/
     }
 
         .info-box .info-box-icon > img {
