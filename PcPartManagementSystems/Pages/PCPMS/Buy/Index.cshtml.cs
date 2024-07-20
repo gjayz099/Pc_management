@@ -5,7 +5,7 @@ namespace PcPartManagementSystems.Pages.PCPMS.Buy
 {
     public class IndexModel : PageModel
     {
-        [BindProperty] public List<bl.model.Customer> ret {  get; set; }
+        [BindProperty] public List<bl.model.Customer.CusToTotalBuy> ret {  get; set; }
         public IActionResult OnGet()
         {
             var _ps = new _session();

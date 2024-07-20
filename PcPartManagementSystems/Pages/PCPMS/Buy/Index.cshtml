@@ -29,9 +29,7 @@
                 ajax: {
                     url: '?handler=DisplayData',
                     dataSrc: '',
-                    succes: function (data) {
-                        console.log(data)
-                    }
+                   
                 },
                 order: [[1, 'desc']], 
                 info: false, 
@@ -42,6 +40,33 @@
                     console.error('Error fetching data:', textStatus, errorThrown);
                     Swal.fire({ icon: "error", title: errorThrown });
                 },
+
+                columns: [
+                    {
+                        title: '',
+                        data: 'id',
+                        render: function (data, type, row, meta) {
+                            return '<a class="btn btn-primary edit-btn" href="/PCPMS/Buy/View/' + data + '">View Buy</a>';
+
+                        },
+                    },
+                    {
+                        title: "Firstname",
+                        data: "firstname"
+                    },
+                    {
+                        title: "Lastname",
+                        data: "lastname"
+                    },
+                    {
+                        title: "Total Price",
+                        data: "totalPriceItem",
+                        render: function (data, type, row) {
+                            return formatCurrency(data)
+                        },
+                        type: 'money'
+                    }
+                ],
 
              
             });

@@ -24,6 +24,12 @@ $(document).ready(function () {
     })
 
 
+    $('#SuccessShowModal').modal('show');
+
+    $('#SuccessShowModal').click(function () {
+        $('#SuccessShowModal').modal('hide');
+    })
+
 
     $('#dropdown-toggle').click(function (e) {
         e.preventDefault(); // Prevent default anchor behavior
@@ -43,10 +49,23 @@ $(document).ready(function () {
     });
   
 
+
+
 });
 
 
 
+
+// Function to update total price display
+function updateTotalPrice() {
+    var totalPrice = 0;
+    $('.totalPrice').each(function () {
+        var price = parseFloat($(this).val()) || 0; // Parse price value to float, default to 0 if NaN
+        totalPrice += price;
+    });
+    $('#totalPriceDisplay').text(formatCurrency(totalPrice)); // Update total price display
+    $('#totalPriceDisplayHide').val(formatCurrency(totalPrice)); // Update total price display
+}
 
 
 // Function to display loading indicator for 10 seconds

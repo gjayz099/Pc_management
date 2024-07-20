@@ -8,20 +8,20 @@
               INSERT INTO {bl.refs.Databse_DB}.dbo.pcpms_totalPrice
                 (
                     Id
-                    ,TatalPrice
+                    ,TotalPrice
                     ,CustomerID
                 )
                     VALUES
                 (
                     NEWID()
-                    ,@TatalPrice
+                    ,@TotalPrice
                     ,@CustomerID
                 )
             ";
 
             var ret = await bl.DBaccess.ExecNonQueryAsync(SqlInsert, new List<Microsoft.Data.SqlClient.SqlParameter>
             {
-                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@TatalPrice", Value = dto.TotalPrice },
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@TotalPrice", Value = dto.TotalPrice },
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CustomerID", Value = cus}
             });
 

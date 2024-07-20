@@ -1,7 +1,6 @@
-using Azure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Transactions;
+
 
 namespace PcPartManagementSystems.Pages.PCPMS.Buy
 {
@@ -39,7 +38,7 @@ namespace PcPartManagementSystems.Pages.PCPMS.Buy
             }
             TempData[bl.refs.SeccessMessage] = $@"Succes to Buy Item!";
 
-            return RedirectToPage("/PCPMS/Data/Manufature/Index");
+            return RedirectToPage("/PCPMS/buy/Index");
 
 
         }

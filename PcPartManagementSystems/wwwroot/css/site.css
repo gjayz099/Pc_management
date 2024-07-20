@@ -25,10 +25,15 @@
     border-bottom: 1px solid #00000094;
     background: transparent;
     border-radius: 0;
+
 }
 .login-input input:focus {
     box-shadow: none;
     background: none;
+}
+
+.login-input input::placeholder {
+    color: #000; /* Replace with your desired color code */
 }
 .loginlogo{
     text-align: center;
@@ -64,4 +69,16 @@
 .table-input-manu tbody tr td {
     border-top: none !important;
     border-bottom: none !important;
+}
+.modal-header-error{
+    width: 100%;
+    height: 50px;
+    border-radius: 5px 5px 0 0
+}
+
+.modal-header-Success {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px 5px 0 0
+}
 }
