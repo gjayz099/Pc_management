@@ -278,20 +278,42 @@ namespace bl
                     // Open the SQL connection asynchronously
                     await sqlCn.OpenAsync();
 
-                    // Create a new SQL command with the provided SQL query and connection
-                    using (var cmd = new Microsoft.Data.SqlClient.SqlCommand(strSQL, sqlCn))
+                    // Begin a SQL transaction
+                    using (var transaction = sqlCn.BeginTransaction())
                     {
-                        // Add parameters to the SQL command if any are provided
-                        cmd.Parameters.AddRange(parameters.ToArray());
-                        // Set command timeout to 1200 seconds (20 minutes)
-                        cmd.CommandTimeout = 1200;
+                        try
+                        {
+                            // Create a new SQL command with the provided SQL query, connection, and transaction
+                            using (var cmd = new Microsoft.Data.SqlClient.SqlCommand(strSQL, sqlCn, transaction))
+                            {
+                                // Add parameters to the SQL command if any are provided
+                                cmd.Parameters.AddRange(parameters.ToArray());
 
-                        // Execute the non-query asynchronously and retrieve the number of rows affected
-                        ret = await cmd.ExecuteNonQueryAsync();
+                                // Set command timeout to 1200 seconds (20 minutes)
+                                cmd.CommandTimeout = 1200;
+
+                                // Execute the non-query asynchronously and retrieve the number of rows affected
+                                ret = await cmd.ExecuteNonQueryAsync();
+                            }
+
+                            // Commit the transaction if the command succeeds
+                            transaction.Commit();
+                        }
+                        catch (Exception ex)
+                        {
+                            // Rollback the transaction in case of an exception
+                            transaction.Rollback();
+
+                            // Log the error with details of the SQL query and exception
+                            sys.writelog("error_PCPMS_executenonquery", strSQL + "\r\n" + sys.ReadException(ex) + " / " + ex.StackTrace);
+
+                            // Rethrow the exception to propagate it for further handling
+                            throw;
+                        }
                     }
 
                     // Close the SQL connection
-                    sqlCn.Close();
+                    await sqlCn.CloseAsync();
                 }
                 catch (Exception ex)
                 {
@@ -320,6 +342,7 @@ namespace bl
             // Return the number of rows affected by the non-query execution
             return ret;
         }
+
 
 
         // Method to execute a non-query asynchronously with parameters and return status and error message

@@ -1,8 +1,6 @@
 ﻿@{
     var _ps = new _session();
     bool userLogin = _ps.IsUserLoggedIn(Context);
-
-    bool IsAdmin = _ps.IsUserLoggedIn(Context);
 }
 
 <!DOCTYPE html>
@@ -69,7 +67,7 @@
 
     @if (userLogin)
     {
-  
+
         <!-- Navbar -->
         <nav class="main-header navbar navbar-expand navbar-white navbar-light py-1">
             <!-- Left navbar links -->
@@ -90,21 +88,23 @@
                         <li>
                             <a class="dropdown-item" href="/Logout">Logout</a>
                         </li>
-                       
+
                     </ul>
                 </div>
 
-         
+
 
             </ul>
         </nav>
-        <!-- /.navbar -->
+       <!-- /.navbar -->
+
     }
 
     @if (userLogin)
     {
-        <!-- Main Sidebar Container -->
-        <aside class="main-sidebar sidebar-light-gray elevation-4">
+
+    <!-- Main Sidebar Container -->
+    <aside class="main-sidebar sidebar-light-gray elevation-4">
             <!-- Sidebar -->
         <div class="sidebar">
             <!-- Brand Logo -->
@@ -120,19 +120,19 @@
                         if (menu.MenuListUI == null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link" asp-page="@menu.Url">
+                                <a class="nav-link text-black" asp-page="@menu.Url" onclick="return BtnClick()">
                                     <i class="nav-icon fas fa-th"></i>
                                     <p>
                                         @menu.Name
-                               
+                           
                                     </p>
                                 </a>
                             </li>
                         }
-                          
+                      
                     }                   
                     <!-- Dashboard-->
-      
+    
                     <!-- Data -->
                     <li class="nav-item">
                         <a href="#" class="nav-link">
@@ -140,11 +140,11 @@
                             <p>
                                 Data
                                 <i class="fas fa-angle-left right"></i>
-                 
+             
                             </p>
                         </a>
                         <ul class="nav nav-treeview">
-                         
+                     
 
                            @foreach (var menu in bl.menu.mnu.mnuMenuMain)
                            {
@@ -152,7 +152,7 @@
                                 if (menu.MenuListUI == bl.menu.mnu.Menu_Data)
                                 {
                                      <li class="nav-item">
-                                         <a asp-page="@menu.Url" class="nav-link" onclick="return BtnClick()">
+                                            <a asp-page="@menu.Url" class="nav-link text-black" onclick="return BtnClick()">
                                              <i class="fa-solid fa-database"></i>
                                              <p>@menu.Name</p>
                                          </a>
@@ -179,9 +179,9 @@
                                     if (menu.MenuListUI == bl.menu.mnu.Menu_Report)
                                     {
 
-                                   
+                               
                                         <li class="nav-item">
-                                            <a asp-page="@menu.Url" class="nav-link" onclick="return BtnClick()">
+                                            <a asp-page="@menu.Url" class="nav-link text-black" onclick="return BtnClick()">
                                                 <i class="fa-solid fa-database"></i>
                                                 <p>@menu.Name</p>
                                             </a>
@@ -197,6 +197,7 @@
         </div>
         <!-- /.sidebar -->
     </aside>
+
     }
 
     <!-- Content Wrapper. Contains page content -->
@@ -221,10 +222,6 @@
         <!-- /.content-header -->
         <!-- /.content -->
     </div>
-
-
-
-
 
 
     @* / Partial// *@

@@ -12,10 +12,8 @@
                     ,sle.Quantity_Sold
                     ,sle.UnitPrice
                     ,sle.Total_Price
-                    ,CONCAT(usr.Firstname, '-', usr.Lastname)
                     ,sle.Date_sale
                 FROM gerald_pcpms_db.dbo.pcpms_sale AS sle
-                JOIN gerald_pcpms_db.dbo.pcpms_User AS usr ON usr.Id = sle.CustomerID
                 JOIN gerald_pcpms_db.dbo.pcpms_manufature AS mft ON mft.Id = sle.PartID
                 LEFT JOIN gerald_pcpms_db.dbo.pcpms_categories AS ctg ON ctg.Id = mft.CategoryID;";
 
@@ -38,6 +36,55 @@
             return (false, "Success", ret);
 
         }
+
+        public static async Task<string> InsertRequestAsync(List<bl.dto.Sales> dtoList, Guid CusId)
+        {
+            string SqlInsert = $@"
+                INSERT INTO {bl.refs.Databse_DB}.dbo.pcpms_sale
+                (
+                    Id 
+                    ,PartID
+                    ,Quantity_Sold
+                    ,UnitPrice
+                    ,CustomerId
+                    ,Total_Price
+                    ,Date_sale
+                )
+                    VALUES
+                (
+                    NEWID()
+                    ,@PartID
+                    ,@Quantity_Sold
+                    ,@UnitPrice
+                    ,@CustomerId
+                    ,@Total_Price
+                    ,@Date_sale
+                )
+            ";
+
+            foreach (var dto in dtoList)
+            {
+                var ret = await bl.DBaccess.OldExecNonQueryAsync(SqlInsert, new List<Microsoft.Data.SqlClient.SqlParameter>
+                    {
+                        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@PartID", Value = dto.PartsID },
+                        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Quantity_Sold", Value = dto.QuantitySold  },
+                        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@UnitPrice", Value = dto.UnitPrice  },
+                        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CustomerId", Value = CusId  },
+                        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Total_Price", Value = dto.TotalPrice },
+                        new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Date_sale", Value = DateTime.Now  }
+                    });
+
+       
+
+            }
+
+            return $"Add {dtoList.Count} Data";
+
+        }
+
+
+
+
     }
 
 }

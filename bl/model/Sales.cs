@@ -7,7 +7,7 @@
         public int QuantitySold { get; set; }
         public decimal UnitPrice { get; set; }
         public decimal TotalPrice { get; set; }
-        public Guid CustomerID { get; set; } ///// user DB
+        public Guid CustomerID { get; set; } ///// Custmer DB
         public DateTime DateSale { get; set; }
 
         public class SaleWithCustomer

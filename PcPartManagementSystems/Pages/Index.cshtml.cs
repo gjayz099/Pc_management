@@ -36,7 +36,17 @@ namespace PcPartManagementSystems.Pages
             usr = await bl.model.Users.CheackUserHave(dto.Username);
 
             var _ps = new _session();
+
             _ps.UserLogin(HttpContext, usr);
+
+            var admin = _ps.IsAddminUser(HttpContext, usr.Role);
+            if(!admin) 
+            {
+                TempData[bl.refs.ErrorMessageLogin] = "Not admin";
+                _ps.ClearSession(HttpContext);
+                return RedirectToPage();
+            }
+            TempData[bl.refs.SeccessMessage] = $@"successfully Login {dto.Role}";
 
             bl.sys.Acceslog("Accees", _ps.GetSessionValue(HttpContext, "_FullName"), "Login");
 

@@ -139,6 +139,58 @@ function setSelect2ID(url, selector, selectedValue) {
 }
 
 
+// Function to fetch and populate Select2 dropdown
+function setSelect2ID(url, selector, selectedValue, selectme) {
+    $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            $(selector).empty();
+
+            // Add a placeholder option
+            var placeholderOption = '<option value="" disabled selected> ---Select--- </option>';
+            $(selector).append(placeholderOption);
+
+            // Populate dropdown with fetched data
+            $.each(data, function (index, item) {
+                var option = '<option value="' + item.id + '">' + item.text + '</option>';
+                $(selector).append(option);
+            });
+
+            // Initialize Select2 dropdown
+            $(selector).select2();
+
+            // Event listener for dropdown change
+            $(selector).on('change', function () {
+                var selectedId = $(this).val();
+                var selectedItem = data.find(x => x.id === selectedId);
+
+                if (selectedItem) {
+                    if (selectme) {
+                        $(selectme).val(selectedItem.value1); // Assuming 'value1' contains the price
+                   
+                    }
+                }
+            });
+
+            // Set selected value and trigger change event
+            if (selectedValue !== null && selectme) {
+                $(selector).val(selectedValue);
+                $(selector).trigger('change');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+        }
+    });
+}
+
+
+
+
+
+
 
 function setSelect2Name(url, selector, selectedValue) {
     $.ajax({

@@ -22,7 +22,8 @@ CREATE TABLE pcpms_sale (
     UnitPrice Decimal(10, 2) NULL, -- Adjusted decimal precision and scale
     Total_Price Decimal(10, 2) NULL,
     CustomerId uniqueidentifier NULL, -- Corrected column name to CustomerName
-    Date_sale DATETIME NULL
+    Date_sale DATETIME NULL,
+    TLPriceID uniqueidentifier NULL,
 );
 
 
@@ -30,28 +31,19 @@ CREATE TABLE pcpms_user (
     Id uniqueidentifier PRIMARY KEY,
 	Firstname NVARCHAR(250) NULL,
 	Lastname NVARCHAR(250) NULL,
-    Age Int NULL,
     Username NVARCHAR(250) NULL, 
     Password NVARCHAR(250) NULL,
-    regionsId uniqueidentifier NULL,
-    provincesId uniqueidentifier NULL,
-    cityId uniqueidentifier NULL,
 );
 
-CREATE TABLE pcpms_regions (
+CREATE TABLE pcpms_customer (
     Id uniqueidentifier PRIMARY KEY,
-	Regions NVARCHAR(250) NULL,
-);
-CREATE TABLE pcpms_provinces (
-    Id uniqueidentifier PRIMARY KEY,
-	Provinces NVARCHAR(250) NULL,
-    RegionsId uniqueidentifier NULL
-);
-CREATE TABLE pcpms_city (
-    Id uniqueidentifier PRIMARY KEY,
-    City NVARCHAR(250) NULL,
-    ProvincesId uniqueidentifier NULL
+	Firstname NVARCHAR(250) NULL,
+	Lastname NVARCHAR(250) NULL,
 );
 
+CREATE TABLE pcpms_totalPrice (
+    Id uniqueidentifier PRIMARY KEY,
+	TatalPrice NVARCHAR(250) NULL,
+);
 
 

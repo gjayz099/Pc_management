@@ -38,8 +38,6 @@
             // Fetch manufacturing details using ExecuteQueryIDAsync method
             bl.dto.Manufacturies ret = await bl.data.Manufaturies.ExecuteQueryIDAsync(id);
 
-          
-
             return ret;
         }
     }

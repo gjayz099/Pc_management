@@ -9,11 +9,10 @@
                 SELECT
 	                Firstname
 	                ,Lastname
-	                ,Age
 	                ,Username
 	                ,Password
                     ,Role
-                FROM gerald_pcpms_db.dbo.pcpms_user
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_user
                 where Username = @Username and Password = @Password";
 
             var par = new List<Microsoft.Data.SqlClient.SqlParameter>
@@ -30,10 +29,9 @@
            
                 Firstname = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
                 Lastname = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
-                Age = (x[2] == DBNull.Value) ? 0 : (int)x[2],
-                Username = (x[3] == DBNull.Value) ? string.Empty : (string)x[3],
-                Password = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
-                Role = (x[5] == DBNull.Value) ? string.Empty : (string)x[5],
+                Username = (x[2] == DBNull.Value) ? string.Empty : (string)x[2],
+                Password = (x[3] == DBNull.Value) ? string.Empty : (string)x[3],
+                Role = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
             });
 
 
@@ -51,11 +49,10 @@
                 SELECT
 	                Firstname
 	                ,Lastname
-	                ,Age
 	                ,Username
 	                ,Password
                     ,Role
-                FROM gerald_pcpms_db.dbo.pcpms_user
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_user
                 where Username = @Username";
 
             var par = new List<Microsoft.Data.SqlClient.SqlParameter>
@@ -72,10 +69,9 @@
 
                 Firstname = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
                 Lastname = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
-                Age = (x[2] == DBNull.Value) ? 0 : (int)x[2],
-                Username = (x[3] == DBNull.Value) ? string.Empty : (string)x[3],
-                Password = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
-                Role = (x[5] == DBNull.Value) ? string.Empty : (string)x[5],
+                Username = (x[2] == DBNull.Value) ? string.Empty : (string)x[2],
+                Password = (x[3] == DBNull.Value) ? string.Empty : (string)x[3],
+                Role = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
             });
 
             return ret.data;
@@ -93,6 +89,61 @@
                 return Convert.ToBase64String(hashedBytes);
             }
         }
+
+
+        // Method to handle user signup
+        public static async Task<string> SignUpAsync(bl.dto.Users user)
+        {
+            string hashedPassword = HashPassword(user.Password);
+
+            // Example SQL query to insert a new user into the database
+            string query = $@"INSERT INTO
+                        FROM {bl.refs.Databse_DB}.dbo.pcpms_user (
+                            Id
+                            ,Firstname
+                            ,Lastname
+                            ,Username
+                            ,Password
+                            ,Role)
+                        VALUES (
+                            NEWID()
+                            ,@Firstname
+                            ,@Lastname
+                            ,@Username
+                            ,@Password
+                            ,@Role)";
+
+
+            var result = await bl.DBaccess.ExecNonQueryAsync(query, new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter("@Firstname", user.Firstname),
+                new Microsoft.Data.SqlClient.SqlParameter("@Lastname", user.Lastname),
+                new Microsoft.Data.SqlClient.SqlParameter("@Username", user.Username),
+                new Microsoft.Data.SqlClient.SqlParameter("@Password", hashedPassword),
+                new Microsoft.Data.SqlClient.SqlParameter("@Role", user.Role),
+            });
+
+            if (!string.IsNullOrEmpty(result.err))
+            {
+                return $"Error inserting user: {result.err}";
+            }
+            return $"Sign Up Successful for {user.Username}.";
+
+        }
+        public static async Task<int> CheckCountUsername(string username)
+        {
+            string query = $@"SELECT COUNT(*) FROM {bl.refs.Databse_DB}.dbo.pcpms_user WHERE Username = @Username";
+
+            var parameters = new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@Username", Value = username }
+            };
+
+            int count = await bl.DBaccess.ExecuteScalarAsync(query, parameters);
+
+            return count;
+        }
+
 
     }
 }

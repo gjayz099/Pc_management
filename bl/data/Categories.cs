@@ -40,7 +40,7 @@
                    ,@CategoriesName
                 )";
 
-            var ret = await bl.DBaccess.OldExecNonQueryAsync(Sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+            var ret = await bl.DBaccess.ExecNonQueryAsync(Sql, new List<Microsoft.Data.SqlClient.SqlParameter>
             {
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoriesName", Value = dto.CategoryName  }
             });

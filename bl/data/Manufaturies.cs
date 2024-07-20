@@ -100,7 +100,7 @@
                              ,@PictureName
                             )";
 
-            int ret = await bl.DBaccess.OldExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+            var ret = await bl.DBaccess.ExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
             {
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@ManufatureName", Value = dto.ManufactureName},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Specification", Value = dto.Specification},
