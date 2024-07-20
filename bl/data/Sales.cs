@@ -12,10 +12,12 @@
                     ,sle.Quantity_Sold
                     ,sle.UnitPrice
                     ,sle.Total_Price
+                    ,CONCAT(ct.Firstname,' ',ct.Lastname)
                     ,sle.Date_sale
-                FROM gerald_pcpms_db.dbo.pcpms_sale AS sle
-                JOIN gerald_pcpms_db.dbo.pcpms_manufature AS mft ON mft.Id = sle.PartID
-                LEFT JOIN gerald_pcpms_db.dbo.pcpms_categories AS ctg ON ctg.Id = mft.CategoryID;";
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_sale AS sle
+                JOIN {bl.refs.Databse_DB}.dbo.pcpms_manufature AS mft ON mft.Id = sle.PartID
+                JOIN {bl.refs.Databse_DB}.dbo.pcpms_customer AS ct ON ct.Id = sle.CustomerId
+                LEFT JOIN {bl.refs.Databse_DB}.dbo.pcpms_categories AS ctg ON ctg.Id = mft.CategoryID;";
 
         public static async Task<(bool err, string stauts, List<bl.model.Sales.SaleWithCustomer> data)> ExecuteQueryAsync()
 		{
