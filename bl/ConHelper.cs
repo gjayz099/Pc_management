@@ -57,6 +57,23 @@ namespace bl
             return SaveIMG;
         }
 
+
+        public static ConfigValue SaverfileRport()
+        {
+            // Retrieve the string value associated with the key "report" from the configuration.
+            string _SaveReport = GetString("report");
+
+            // Create and initialize a new ConfigValue object.
+            ConfigValue SaveReport = new ConfigValue
+            {
+                // Set the 'report' property of the ConfigValue object with the retrieved value.
+                report = _SaveReport,
+            };
+
+            // Return the initialized ConfigValue object.
+            return SaveReport;
+        }
+
         // Method to construct and return the connection string
         public static string ConnectionConfiguration()
         {
@@ -120,7 +137,8 @@ namespace bl
             public string DBUSER { get; set; }    // Property for database username
             public string DBPASS { get; set; }    // Property for database password
             public string Port { get; set; }      // Property for port number
-            public string SaveImg { get; set; }      // Property for port number
+            public string SaveImg { get; set; }      // Property for save url
+            public string report { get; set; }      // Property for report url
         }
     }
 }

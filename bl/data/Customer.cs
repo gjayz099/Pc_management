@@ -14,7 +14,6 @@ namespace bl.data
 			             ,sll.Total_Price
                          ,ctg.CategoriesName    
                     FROM gerald_pcpms_db.dbo.pcpms_customer cus
-                    JOIN gerald_pcpms_db.dbo.pcpms_totalPrice ttp ON ttp.CustomerID = cus.Id
 		            JOIN gerald_pcpms_db.dbo.pcpms_sale sll ON sll.CustomerId = cus.Id
 		            RIGHT JOIN gerald_pcpms_db.dbo.pcpms_manufature mft ON mft.Id = sll.PartID
                     RIGHT JOIN gerald_pcpms_db.dbo.pcpms_categories ctg ON ctg.Id = mft.CategoryID";
@@ -48,10 +47,11 @@ namespace bl.data
                                 cus.Id
                                 ,cus.Firstname
                                 ,cus.Lastname
-                                ,ttp.TotalPrice
+                               ,Sum(sl.Total_Price)
                             FROM {bl.refs.Databse_DB}.dbo.pcpms_customer cus
-                            JOIN {bl.refs.Databse_DB}.dbo.pcpms_totalPrice ttp ON ttp.CustomerID = cus.Id
-                             WHERE cus.Id = @Id;";
+                             JOIN {bl.refs.Databse_DB}.dbo.pcpms_sale sl on sl.CustomerId = cus.Id
+                             WHERE cus.Id = @Id
+							 GROUP BY cus.Id, cus.Firstname, cus.Lastname";
 
 
             var par = new List<Microsoft.Data.SqlClient.SqlParameter>
@@ -75,12 +75,13 @@ namespace bl.data
         {
             string sqlSelectAll = $@"
                 SELECT
-                    cus.Id
-                    ,cus.Firstname
-                    ,cus.Lastname
-                    ,ttp.TotalPrice
+                   cus.Id
+                   ,cus.Firstname
+                   ,cus.Lastname
+		           ,Sum(sl.Total_Price)
                 FROM {bl.refs.Databse_DB}.dbo.pcpms_customer cus
-                JOIN {bl.refs.Databse_DB}.dbo.pcpms_totalPrice ttp ON ttp.CustomerID = cus.Id";
+                JOIN {bl.refs.Databse_DB}.dbo.pcpms_sale sl on sl.CustomerId = cus.Id
+                GROUP BY cus.Id, cus.Firstname, cus.Lastname;";
 
 
             var ret = await bl.DBaccess.RawSqlQueryAsync(sqlSelectAll, x => new bl.model.Customer.CusToTotalBuy
@@ -163,6 +164,18 @@ namespace bl.data
 
 
             return $"Add {ret} Data";
+        }
+
+
+        public static async Task<int> CountCustomerExecuteQueryAsync()
+        {
+            string sqlSelectAll = $@"SELECT 
+                                    COUNT(*)
+                                    FROM {bl.refs.Databse_DB}.dbo.pcpms_customer";
+
+            int ret = await bl.DBaccess.ExecuteScalarAsync(sqlSelectAll);
+
+            return ret;
         }
     }
 }

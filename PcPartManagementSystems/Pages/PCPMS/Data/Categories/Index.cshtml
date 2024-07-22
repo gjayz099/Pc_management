@@ -6,7 +6,7 @@
 
 @section Topbar {
     <div class="py-2 me-3">
-        <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">Add</a>
+        <a type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="return BtnClick()">Add</a>
     </div>
 }
 
@@ -25,7 +25,7 @@
             </div>
             <div class="modal-footer d-flex justify-content-between px-2">
                 <button type="button" id="ClearInput" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
-                <button type="submit" class="btn btn-primary" id="ClearInput" asp-page-handler="InsertCategory" onclick="return BtnClick()">Save</button>
+                <button type="submit" class="btn btn-success" id="ClearInput" asp-page-handler="InsertCategory" onclick="return BtnClick()">Save</button>
             </div>
             </form>
         </div>

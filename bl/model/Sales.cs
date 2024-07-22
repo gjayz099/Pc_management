@@ -23,6 +23,11 @@
             public DateTime DateSale { get; set; }
         }
 
+        public class Totalprice
+        {
+            public decimal Total_Price { get; set; } 
+        }
+
         public static async Task<List<bl.model.Sales.SaleWithCustomer>> GetAllAsync()
         {
 
@@ -30,5 +35,9 @@
 
             return ret.data;
         }
+
+
+
+
     }
 }

@@ -100,6 +100,14 @@ namespace bl.dto
             return fileName;
         }
 
+        public static async Task<int> CountManuAsync()
+        {
+            int count = await bl.data.Manufaturies.CountManuExecuteQueryAsync();
+
+            return count;
+        }
+
+
 
     }
 

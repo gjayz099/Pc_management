@@ -114,6 +114,34 @@ function FileImg(img) {
 
 
 
+function GetDataInMoneyAjax(url, value) {
+    $.ajax({
+        url: url,
+        dataSrc: '',
+        success: function (data) {
+            $(value).text(formatCurrency(data));
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching data:', textStatus, errorThrown);
+            Swal.fire({ icon: "error", title: errorThrown });
+        },
+    })
+}
+
+function GetDataInCountjax(url, value) {
+    $.ajax({
+        url: url,
+        dataSrc: '',
+        success: function (data) {
+            $(value).text(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.error('Error fetching data:', textStatus, errorThrown);
+            Swal.fire({ icon: "error", title: errorThrown });
+        },
+    })
+}
+
 // Function to populate a Select2 dropdown from a URL
 function setSelect2ID(url, selector, selectedValue) {
     // Make an AJAX request to fetch data from the specified URL

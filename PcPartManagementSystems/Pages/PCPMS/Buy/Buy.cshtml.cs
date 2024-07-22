@@ -9,7 +9,6 @@ namespace PcPartManagementSystems.Pages.PCPMS.Buy
     {
         [BindProperty] public bl.dto.Customer dt { get; set; }
         [BindProperty] public bl.model.Customer ret { get; set; }
-        [BindProperty] public bl.dto.TotalPriceBuy dtTP { get; set; }
         [BindProperty] public List<bl.dto.Sales> dts { get; set; }
         [BindProperty] public string error { get; set; }
         public IActionResult OnGet()
@@ -24,7 +23,7 @@ namespace PcPartManagementSystems.Pages.PCPMS.Buy
         public async Task<IActionResult> OnPostInsertBuyCustomer()
         {
     
-            error =  await bl.dto.Customer.SavedataAll(dt, dts, dtTP);
+            error =  await bl.dto.Customer.SavedataAll(dt, dts);
             if (!string.IsNullOrEmpty(error))
             {
                 TempData[bl.refs.ErrorMessage] = error;

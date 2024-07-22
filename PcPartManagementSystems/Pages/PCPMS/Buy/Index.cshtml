@@ -1,7 +1,7 @@
 ﻿@page
 @model PcPartManagementSystems.Pages.PCPMS.Buy.IndexModel
 @{
-    ViewData["Title"] = bl.menu.mnu.GetNamedta(bl.menu.mnu.Menu_Buy);
+    ViewData["Title"] = bl.menu.mnu.GetNamedta(bl.menu.mnu.Menu_Name_Buy);
 }
 
 
@@ -46,7 +46,7 @@
                         title: '',
                         data: 'id',
                         render: function (data, type, row, meta) {
-                            return '<a class="btn btn-primary edit-btn" href="/PCPMS/Buy/View/' + data + '">View Buy</a>';
+                            return '<a class="btn btn-primary edit-btn" href="/PCPMS/Buy/View/' + data + '" onclick="return BtnClick()">View Buy</a>';
 
                         },
                     },

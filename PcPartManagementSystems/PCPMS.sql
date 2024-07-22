@@ -46,6 +46,12 @@ CREATE TABLE pcpms_totalPrice (
 	TatalPrice NVARCHAR(250) NULL,
 );
 
-
-
-
+CREATE TABLE pcpms_report (
+    Id UNIQUEIDENTIFIER PRIMARY KEY,
+    UserGenerateReport NVARCHAR(250) NULL,
+    NameFileGenerateReport NVARCHAR(250) NULL,
+    DateGenerateReport DATETIME NULL,
+    PDF BIT NULL,
+	XMLS BIT NULL,
+	CSV BIT NULL
+);

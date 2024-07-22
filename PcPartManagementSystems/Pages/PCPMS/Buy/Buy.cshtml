@@ -7,9 +7,10 @@
 
 @section Topbar {
     <div class="py-2 me-3">
-        <a class="btn btn-secondary edit-btn" href="/PCPMS/Buy/index/" onclick="return BtnClick()">Back</a>
-        <button type="submit" class="btn btn-secondary" form="SaveData" asp-page-handler="InsertBuyCustomer">Save</button>
-        <button id="click" class="btn btn-secondary ">Add Buy</button>
+        <a type="button" class="btn btn-dark edit-btn" href="/PCPMS/Buy/index/" onclick="return BtnClick()">Back</a>
+
+        <button type="button" id="click" class="btn btn-dark">Add Buy</button>
+        <button type="submit" class="btn btn-success" form="SaveData" asp-page-handler="InsertBuyCustomer">Save</button>
     </div>
 }
 
@@ -19,7 +20,6 @@
             <div class="container-fluid m-auto row">
                
                 <div class="col-12 m-auto justify-content-center card-body card">
-                    <input hidden asp-for="dtTP.TotalPrice" id="totalPriceDisplayHide" />
                     <div class="text-end ml-5">Total Price: <span id="totalPriceDisplay" >0.00</span></div>
 
                     <div class="row">

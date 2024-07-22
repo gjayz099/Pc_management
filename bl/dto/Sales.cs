@@ -44,6 +44,13 @@
         }
 
 
+        public static async Task<decimal> GetSumSaleAsync()
+        {
+
+            var ret = await bl.data.Sales.SumSaleExecuteQueryAsync();
+
+            return ret;
+        }
 
     }
 }

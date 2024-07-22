@@ -10,8 +10,4 @@
     <ProjectReference Include="..\bl\bl.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\PCPMS\Report\" />
-  </ItemGroup>
-
 </Project>

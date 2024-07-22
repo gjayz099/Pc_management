@@ -36,7 +36,7 @@ namespace bl.dto
         }
 
        
-        public static async Task<string> SavedataAll(bl.dto.Customer cus, List<bl.dto.Sales> dts, bl.dto.TotalPriceBuy totalPrice)
+        public static async Task<string> SavedataAll(bl.dto.Customer cus, List<bl.dto.Sales> dts)
         {
             var error = await bl.dto.Customer.InsertAsync(cus);
             if (!string.IsNullOrEmpty(error)) return error;
@@ -53,12 +53,17 @@ namespace bl.dto
 
             }
 
-            string erro = await bl.dto.TotalPriceBuy.InsertAsync(totalPrice, ret.Id);
-
-            if(string.IsNullOrEmpty(erro)) return erro;
 
             return "";
            
+        }
+
+
+        public static async Task<int> CountCustomerAsync()
+        {
+            int count = await bl.data.Customer.CountCustomerExecuteQueryAsync();
+
+            return count;
         }
     }
 

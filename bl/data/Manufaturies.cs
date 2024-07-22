@@ -145,6 +145,53 @@
             return $"Succes To Update {ret} Data {dto.ManufactureName} Manufature";
         }
 
+        public static async Task<int> CountManuExecuteQueryAsync()
+        {
+            string sqlSelectAll = $@"SELECT 
+                                    COUNT(*)
+                                    FROM {bl.refs.Databse_DB}.dbo.pcpms_manufature";
+
+            int ret = await bl.DBaccess.ExecuteScalarAsync(sqlSelectAll);
+
+            return ret;
+        }
+
+        ///// Report
+        public static async Task<List<bl.report.PSC>> RPSExecuteQueryAsync(string CategoryName = null)
+        {
+
+            string RPSsql = $@"
+                SELECT 
+                    c.CategoriesName 
+                    ,m.ManufatureName
+                    ,m.Stock
+                    ,m.Price
+                    ,m.Specification
+                    ,ISNULL(m.Description, '')
+                FROM pcpms_manufature m
+                JOIN pcpms_categories c ON m.CategoryID = c.Id";
+
+
+            // Conditionally add WHERE clause based on CategoryName presence
+            if (!string.IsNullOrEmpty(CategoryName))
+            {
+                RPSsql += $" WHERE c.CatigoriesName = '{CategoryName}'";
+            }
+
+            var ret = await bl.DBaccess.RawSqlQueryAsync(sqlSelectAll, x => new bl.report.PSC
+            {
+
+                CatigoriesName = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
+                ManufatureName = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
+                Stock = (x[2] == DBNull.Value) ? 0 : (int)x[2],
+                Price = (x[3] == DBNull.Value) ? 0 : (decimal)x[3],
+                Specification = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
+                Description = (x[5] == DBNull.Value) ? string.Empty : (string)x[5],
+            });
+
+            return ret.data;
+        }
+
 
     }
 }

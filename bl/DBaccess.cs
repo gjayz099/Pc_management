@@ -189,51 +189,58 @@ namespace bl
             return (false, errormsg, null);
         }
 
-
+        // Method to execute a raw SQL query asynchronously with single row parameters and return status, error message, and data
         public static async Task<(bool status, string errorstr, T data)> RawSqlQuerySingleAsync<T>(string query, List<Microsoft.Data.SqlClient.SqlParameter> _params, Func<System.Data.Common.DbDataReader, T> map)
         {
             string errormsg = "";
 
             try
             {
-                DateTime start = DateTime.Now;
+                DateTime start = DateTime.Now; // Record the start time to measure query performance
 
+                // Create and open a new SQL connection using the connection configuration
                 using (var sqlCn = new Microsoft.Data.SqlClient.SqlConnection(ConHelper.ConnectionConfiguration()))
                 {
+                    // Create a new SQL command with the provided query and connection
                     using (var command = new Microsoft.Data.SqlClient.SqlCommand(query, sqlCn))
                     {
-                        command.CommandType = System.Data.CommandType.Text;
-                        command.CommandTimeout = 1200;
+                        command.CommandType = System.Data.CommandType.Text; // Specify the command type as Text
+                        command.CommandTimeout = 1200; // Set command timeout to 1200 seconds
 
+                        // Add each parameter to the SQL command
                         foreach (var p in _params)
                         {
                             command.Parameters.Add(p);
                         }
 
-                        sqlCn.Open();
+                        sqlCn.Open(); // Open the SQL connection
 
+                        // Execute the command and obtain the result reader
                         using (var result = await command.ExecuteReaderAsync())
                         {
-                            if (result.Read())
+                            if (result.Read()) // Check if there is at least one row in the result set
                             {
+                                // Map the result to the specified type using the provided map function
                                 T entity = map(result);
 
-                                result.Close();
-                                sqlCn.Close();
+                                result.Close(); // Close the result reader
+                                sqlCn.Close(); // Close the SQL connection
 
+                                // Log slow query performance if it exceeds 3 seconds
                                 if ((DateTime.Now - start).TotalSeconds > 3)
                                 {
                                     sys.writelog("sql_PCPMS_slow", (DateTime.Now - start).TotalSeconds.ToString() + "secs SLOW: " + query + "\r\n" + Environment.StackTrace, true);
                                 }
 
+                                // Return a successful status with the mapped result
                                 return (true, "", entity);
                             }
                             else
                             {
-                                result.Close();
-                                sqlCn.Close();
+                                result.Close(); // Close the result reader
+                                sqlCn.Close(); // Close the SQL connection
 
-                                // Handle case where no data was found
+                                // Handle the case where no data was found
                                 return (false, "No data found for the query", default);
                             }
                         }
@@ -242,15 +249,18 @@ namespace bl
             }
             catch (Microsoft.Data.SqlClient.SqlException sqex)
             {
+                // Handle SQL exceptions and log the error
                 errormsg = "Error: " + sqex.Message;
                 sys.writelog("error_PCPMS_executequery", "Error: " + query + "\r\n" + sys.ReadException(sqex) + "/" + sqex.StackTrace);
             }
             catch (Exception ex)
             {
+                // Handle general exceptions and log the error
                 errormsg = "Error: " + ex.Message;
                 sys.writelog("error_PCPMS_executequery", "Error: " + query + "\r\n" + sys.ReadException(ex) + "/" + ex.StackTrace);
             }
 
+            // Return a failure status with the error message
             return (false, errormsg, default);
         }
 

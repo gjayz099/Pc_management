@@ -87,6 +87,17 @@
 
 
 
+        public static async Task<decimal> SumSaleExecuteQueryAsync()
+        {
+            string sqlSelectAll = $@"SELECT 
+                                    Sum(Total_Price)
+                                    FROM {bl.refs.Databse_DB}.dbo.pcpms_sale";
+
+            decimal ret = await bl.DBaccess.ExecuteScalarAsync(sqlSelectAll);
+
+            return ret;
+        }
+
     }
 
 }

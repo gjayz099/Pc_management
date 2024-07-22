@@ -14,6 +14,8 @@
         public static string Databse_DB = "gerald_pcpms_db";
 
 
+
+
         // Static strings for various popups and notifications
         public static string ErrorMessage = "ErrorMsg";
         public static string ErrorMessageLogin = "ErrorMsgLogin";
@@ -23,6 +25,10 @@
         public static string NotifyMessage = "Message";
         public static string Confirm = "Confirm";
         public static string Notify = "Notif";
+
+
+        public const string Pending_Pending = "Pending";
+        public const string Pending_Success = "Success";
 
     }
 }
