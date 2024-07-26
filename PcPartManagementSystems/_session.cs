@@ -35,10 +35,14 @@
         {
             return httpContext.Session.GetString("_FullName") != null;
         }
+
         public string GetSessionValue(HttpContext httpContext, string key)
         {
             return httpContext.Session.GetString(key);
         }
+
+
+      
     }
 
 }

@@ -281,12 +281,6 @@ function setSelect2WithSearch(url, selector) {
         url: url,
         method: 'GET',
         dataType: 'json',
-        data: function (params) {
-            return {
-                q: params.term, // search term
-                page: params.page
-            };
-        },
         success: function (data) {
             $(selector).empty(); // Clear existing options in the dropdown
 

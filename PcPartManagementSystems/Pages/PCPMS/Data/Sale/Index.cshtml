@@ -8,7 +8,7 @@
 <section class="content pt-5">
     <div class="container-fluid m-auto row">
         <div class="col-12 m-auto justify-content-center card-body card">
-            <table id="SalesTable" class="table table-striped table-secondary  display nowrap" style="width: 100%; padding: 0 5px 0 5px"></table>
+            <table id="SalesTable" class="table table-striped table-active display nowrap" style="width: 100%; padding: 0 5px 0 5px"></table>
         </div>
     </div>
 </section>
@@ -62,7 +62,7 @@
                         render: function (data) {
                             return formatCurrency(data)
                         },
-                        type: 'money'
+        
                     },
                     {
                         title: 'TotalPrice',
@@ -70,7 +70,7 @@
                         render: function (data) {
                             return formatCurrency(data)
                         },
-                        type: 'money'
+                   
                     },
                     {
                         title: 'Customer',

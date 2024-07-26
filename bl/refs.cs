@@ -30,5 +30,14 @@
         public const string Pending_Pending = "Pending";
         public const string Pending_Success = "Success";
 
+
+        //// Report 
+        /// PSC
+        public const string PSC = "Report_For_Products_In_A_Specific_Category";
+
+        // 
+        public static string Report_Status_Pending = "Pending";
+        public static string Report_Status_Succes = "Succes";
+
     }
 }

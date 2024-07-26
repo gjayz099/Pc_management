@@ -53,5 +53,8 @@ namespace PcPartManagementSystems.Pages.sel
 
             return new JsonResult(sel2);
         }
+
+
+     
     }
 }

@@ -4,3 +4,157 @@
     ViewData["Title"] = bl.menu.mnu.GetNamedta(bl.menu.mnu.Menu_P_S_C);
 }
 
+@section Topbar {
+    <div class="py-2 me-3">
+        <a type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#MyModal">Add</a>
+    </div>
+}
+
+<div class="modal fade" id="MyModal" tabindex="-1" aria-hidden="true">
+    <form method="post">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Filter report</h5>
+                </div>
+                <div class="modal-body">
+                    <select id="filter" name="Filter" class="form-control" asp-for="Filter">
+                        <option value="">All</option>
+                        @foreach (var category in Model.cat)
+                        {
+                            <option value="@category.CategoryName">@category.CategoryName</option>
+                        }
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary" asp-page-handler="CreateAddReport">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+
+
+
+<section class="content pt-5">
+    <div class="container-fluid m-auto row">
+        <div class="col-12 m-auto justify-content-center card-body card">
+            <table id="PSCPencingTable" class="table table-striped table-active display nowrap" style="width: 100%; padding: 0 5px 0 5px"></table>
+        </div>
+    </div>
+</section>
+
+<div class="" style="border: 2px #000000 solid; width: 100%">
+
+</div>
+
+
+<section class="content pt-5">
+    <div class="container-fluid m-auto row">
+        <div class="col-12 m-auto justify-content-center card-body card">
+            <table id="PSCSuccessTable" class="table table-striped table-active display nowrap" style="width: 100%; padding: 0 5px 0 5px"></table>
+        </div>
+    </div>
+</section>
+
+
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+
+
+            $('#PSCSuccessTable').DataTable({
+                ajax: {
+                    url: '?handler=SuccessDisplayData',
+                    dataSrc: '',
+   
+                },
+                order: [[1, 'desc']], // Sort by Category Name descending by default
+                info: false, // Hide info text "Showing x of y entries"
+                ordering: false, // Disable sorting initially
+                paging: false, // Enable pagination
+                searching: false, // Enable search functionality
+                lengthMenu: [10, 25, 50, 75, 100], // Page length options
+                pageLength: 5, // Default page length
+
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching data:', textStatus, errorThrown);
+                },
+
+                columns: [
+                    {
+                        title: '',
+                        data: 'id',
+                        render: function (data, type, row, meta) {
+                            return '<a  href="/PCPMS/Report/PSC/Index?handler=DownloadXLS&id=' + data + '">XLS</a>';
+
+                        },
+                    },
+                    {
+                        title: "Name Report",
+                        data: "nameFileGenerateReport"
+                    },
+                    {
+                        title: "User Generate",
+                        data: "username"
+                    },
+                    {
+                        title: "Filter",
+                        data: "filter",
+                    }
+
+                ],
+
+
+            })
+
+
+
+            $('#PSCPencingTable').DataTable({
+                ajax: {
+                    url: '?handler=PindingDisplayData',
+                    dataSrc: '',
+
+                },
+                order: [[1, 'desc']], // Sort by Category Name descending by default
+                info: false, // Hide info text "Showing x of y entries"
+                ordering: false, // Disable sorting initially
+                paging: false, // Enable pagination
+                searching: false, // Enable search functionality
+                lengthMenu: [10, 25, 50, 75, 100], // Page length options
+                pageLength: 5, // Default page length
+
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('Error fetching data:', textStatus, errorThrown);
+                },
+
+                columns: [
+                    {
+                  
+                        data: "nameFileGenerateReport"
+                    },
+                    {
+              
+                        data: "username"
+                    },
+                    {
+           
+                        data: "filter",
+                    },
+                    {
+                   
+                        data: "status",
+                    }
+
+                ],
+
+
+            })
+        })
+    </script>
+}

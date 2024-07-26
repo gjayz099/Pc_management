@@ -47,7 +47,8 @@
         {
             string sqlSelectUser = $@"
                 SELECT
-	                Firstname
+                    Id
+	                ,Firstname
 	                ,Lastname
 	                ,Username
 	                ,Password
@@ -65,13 +66,48 @@
             var ret = await bl.DBaccess.RawSqlQuerySingleAsync(sqlSelectUser, par, x => new bl.model.Users
             {
 
+                Id = (x[0] == DBNull.Value) ? Guid.Empty : (Guid)x[0],
+                Firstname = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
+                Lastname = (x[2] == DBNull.Value) ? string.Empty : (string)x[2],
+                Username = (x[3] == DBNull.Value) ? string.Empty : (string)x[3],
+                Password = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
+                Role = (x[5] == DBNull.Value) ? string.Empty : (string)x[5],
+            });
+
+            return ret.data;
+
+        }
+
+        public static async Task<bl.model.Users> CheackUserIDHave(Guid Id)
+        {
+            string sqlSelectUser = $@"
+                SELECT
+                    Id
+	                ,Firstname
+	                ,Lastname
+	                ,Username
+	                ,Password
+                    ,Role
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_user
+                where Id = @Id";
+
+            var par = new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Id", Value = Id},
+
+            };
 
 
-                Firstname = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
-                Lastname = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
-                Username = (x[2] == DBNull.Value) ? string.Empty : (string)x[2],
-                Password = (x[3] == DBNull.Value) ? string.Empty : (string)x[3],
-                Role = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
+            var ret = await bl.DBaccess.RawSqlQuerySingleAsync(sqlSelectUser, par, x => new bl.model.Users
+            {
+
+
+                Id = (x[0] == DBNull.Value) ? Guid.Empty : (Guid)x[0],
+                Firstname = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
+                Lastname = (x[2] == DBNull.Value) ? string.Empty : (string)x[2],
+                Username = (x[3] == DBNull.Value) ? string.Empty : (string)x[3],
+                Password = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
+                Role = (x[5] == DBNull.Value) ? string.Empty : (string)x[5],
             });
 
             return ret.data;

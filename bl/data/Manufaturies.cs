@@ -75,7 +75,7 @@
         }
 
 
-        public static async Task<string> InsertDataAsync(bl.dto.Manufacturies dto, string pictureFileName)
+        public static async Task<int> InsertDataAsync(bl.dto.Manufacturies dto, string pictureFileName)
         {
             string sql = $@"INSERT INTO {bl.refs.Databse_DB}.dbo.pcpms_manufature
                             (    
@@ -100,26 +100,26 @@
                              ,@PictureName
                             )";
 
-            var ret = await bl.DBaccess.ExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+            var ret = await bl.DBaccess.OldExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
             {
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@ManufatureName", Value = dto.ManufactureName},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Specification", Value = dto.Specification},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoryID", Value = dto.CategotyID},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Price", Value = dto.Price},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Stock", Value = dto.Stock},
-                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = (object)dto.Description ??  DBNull.Value},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = string.IsNullOrEmpty(dto.Description)? DBNull.Value : dto.Description},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@PictureName", Value = pictureFileName}
             });
 
 
-            return $"Succes To Insert {ret} Data {dto.ManufactureName} Manufature";
+            return ret;
         }
 
 
-        public static async Task<string> UpdateDataAsync(bl.dto.Manufacturies dto, Guid id)
+        public static async Task<int> UpdateDataAsync(bl.dto.Manufacturies dto, Guid id)
         {
             string sql = $@"
-                        UPDATE gerald_pcpms_db.dbo.pcpms_manufature SET 
+                        UPDATE {refs.Databse_DB}.dbo.pcpms_manufature SET 
                          ManufatureName = @ManufatureName
                          ,CategoryID = @CategoryID
                          ,Stock =@Stock
@@ -129,20 +129,20 @@
                          where Id = '{id}'";
 
 
-            var ret = await bl.DBaccess.ExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
+            var ret = await bl.DBaccess.OldExecNonQueryAsync(sql, new List<Microsoft.Data.SqlClient.SqlParameter>
             {
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@ManufatureName", Value = dto.ManufactureName},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Specification", Value = dto.Specification},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@CategoryID", Value = dto.CategotyID},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Price", Value = dto.Price},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Stock", Value = dto.Stock},
-                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = (object)dto.Description ??  DBNull.Value}
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Description", Value = string.IsNullOrEmpty(dto.Description)? DBNull.Value : dto.Description},
             });
 
         
 
 
-            return $"Succes To Update {ret} Data {dto.ManufactureName} Manufature";
+            return ret;
         }
 
         public static async Task<int> CountManuExecuteQueryAsync()
@@ -156,8 +156,8 @@
             return ret;
         }
 
-        ///// Report
-        public static async Task<List<bl.report.PSC>> RPSExecuteQueryAsync(string CategoryName = null)
+        //-- Example: Report for products in a specific category with additional details
+        public static async Task<List<bl.report.PSC>> RCSExecuteQueryAsync(string catName = null)
         {
 
             string RPSsql = $@"
@@ -172,13 +172,13 @@
                 JOIN pcpms_categories c ON m.CategoryID = c.Id";
 
 
-            // Conditionally add WHERE clause based on CategoryName presence
-            if (!string.IsNullOrEmpty(CategoryName))
+  
+            if (!string.IsNullOrEmpty(catName))
             {
-                RPSsql += $" WHERE c.CatigoriesName = '{CategoryName}'";
+                RPSsql += $" WHERE c.CategoriesName = '{catName}'";
             }
 
-            var ret = await bl.DBaccess.RawSqlQueryAsync(sqlSelectAll, x => new bl.report.PSC
+            var ret = await bl.DBaccess.RawSqlQueryAsync(RPSsql, x => new bl.report.PSC
             {
 
                 CatigoriesName = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],

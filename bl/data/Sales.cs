@@ -1,4 +1,7 @@
-﻿namespace bl.data
+﻿using System;
+using System.Data;
+
+namespace bl.data
 {
     public class Sales
     {
@@ -98,6 +101,61 @@
             return ret;
         }
 
+
+        //-- Example: Report for sales of a specific product in a date range
+        public static async Task<List<bl.report.PSC>> RPSExecuteQueryAsync(DateTime startDate, DateTime endDate, string categoryName = null)
+        {
+
+            string RPSsql = $@"
+                            SELECT 
+                                s.Id AS SaleId,
+                                c.Firstname AS CustomerFirstName,
+                                c.Lastname AS CustomerLastName,
+                                m.ManufatureName AS ProductName,
+                                s.Quantity_Sold,
+                                s.UnitPrice,
+                                s.Total_Price,
+                                s.Date_sale
+                            FROM 
+                                pcpms_sale s
+                            JOIN 
+                                pcpms_customer c ON s.CustomerId = c.Id
+                            JOIN 
+                                pcpms_manufature m ON s.PartID = m.Id
+                            WHERE 
+                                 s.Date_sale BETWEEN @StartDate AND @EndDate
+                                {(string.IsNullOrEmpty(categoryName) ? "" : $"AND m.ManufatureName = @CategoryName")}
+                            ORDER BY 
+                                s.Date_sale DESC;";
+
+
+            var par = new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@StartDate", Value = DbType.DateTime},
+                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@EndDate", Value = DbType.DateTime}
+
+            };
+
+            if (!string.IsNullOrEmpty(categoryName))
+            {
+                par.Add(new Microsoft.Data.SqlClient.SqlParameter("@CategoryName", categoryName));
+            }
+
+            var ret = await bl.DBaccess.RawSqlQueryAsync(sqlSelectAll, par, x => new bl.report.PSC
+            {
+
+                CatigoriesName = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
+                ManufatureName = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
+                Stock = (x[2] == DBNull.Value) ? 0 : (int)x[2],
+                Price = (x[3] == DBNull.Value) ? 0 : (decimal)x[3],
+                Specification = (x[4] == DBNull.Value) ? string.Empty : (string)x[4],
+                Description = (x[5] == DBNull.Value) ? string.Empty : (string)x[5],
+            });
+
+            return ret.data;
+        }
+
     }
+
 
 }

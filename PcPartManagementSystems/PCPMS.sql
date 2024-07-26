@@ -48,8 +48,8 @@ CREATE TABLE pcpms_totalPrice (
 
 CREATE TABLE pcpms_report (
     Id UNIQUEIDENTIFIER PRIMARY KEY,
-    UserGenerateReport NVARCHAR(250) NULL,
-    NameFileGenerateReport NVARCHAR(250) NULL,
+    UserGenerateReport UNIQUEIDENTIFIER NULL,
+    NameFileGenerateReport VARCHAR(250) NULL,
     DateGenerateReport DATETIME NULL,
     PDF BIT NULL,
 	XMLS BIT NULL,

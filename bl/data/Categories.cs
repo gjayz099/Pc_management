@@ -67,5 +67,32 @@
 
             return Count;
         }
+
+
+
+        public static async Task<List<model.Categories>> CheckCategories(Guid branchID)
+        {
+            string sqlQuery = $@"
+                CategoriesName
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_categories
+                where Id = @branchID";
+
+            var par = new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@branchID", Value = branchID }
+            };
+
+
+            var ret = await bl.DBaccess.RawSqlQueryAsync(sqlQuery, par, x => new bl.model.Categories
+            {
+                // Maps the first column (Id) to Category.Id and handles DBNull values
+                Id = (x[0] == DBNull.Value) ? Guid.Empty : (Guid)x[0],
+                // Maps the second column (CategoiesName) to Category.CategoryName and handles DBNull values
+                CategoryName = (x[1] == DBNull.Value) ? string.Empty : (string)x[1]
+            });
+
+
+            return ret.data;
+        }
     }
 }

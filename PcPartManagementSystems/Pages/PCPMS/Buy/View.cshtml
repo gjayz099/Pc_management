@@ -19,7 +19,7 @@
         <div class="col-12 m-auto justify-content-center card-body card">
             <table class="w-100 mb-5">
                 <div class="mb-4">
-                    <input asp-for="ctr.TotalPriceItem" value="@Model.ctr.TotalPriceItem.ToString("N2")" class="form-control border-0 text-end" readonly />
+                    <input asp-for="ctr.TotalPriceItem" value="@Model.ctr.TotalPriceItem.ToString("N2")" class="form-control border-0 text-end bg-white" readonly />
                 </div>
                 <tbody>
                     <tr class="row">
@@ -36,7 +36,7 @@
                 </tbody>
             </table>
 
-            <table id="Customer_buy" class="table table-striped table-secondary display nowrap" style="width: 100%; padding: 0 5px 0 5px"></table>
+            <table id="Customer_buy" class="table table-striped table-active display nowrap" style="width: 100%; padding: 0 5px 0 5px"></table>
         </div>
     </div>
 </section>
@@ -80,7 +80,6 @@
                         render: function (data, type, row) {
                             return formatCurrency(data)
                         },
-                        type: 'money'
                     },
                     {
                         title: "Sold",
@@ -91,8 +90,7 @@
                         data: "totalPriceItem",
                         render: function (data, type, row) {
                             return formatCurrency(data)
-                        },
-                        type: 'money'
+                        }
                     }
 
 

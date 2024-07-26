@@ -39,7 +39,7 @@ namespace PcPartManagementSystems.Pages.PCPMS.Dashboard
         {
             TotalPrice = await bl.dto.Sales.GetSumSaleAsync();
 
-            return new JsonResult(CountManu);
+            return new JsonResult(TotalPrice);
         }
         
     }
