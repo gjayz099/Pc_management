@@ -57,8 +57,9 @@
             /// Report
             new bl.menu.mnu.Menu{ MenuListUI = bl.menu.mnu.Menu_Report, UI = bl.menu.mnu.Menu_P_S_C, Name = bl.menu.mnu.Menu_Name_P_S_C, Url = "/PCPMS/Report/PSC/Index"},
             new bl.menu.mnu.Menu{ MenuListUI = bl.menu.mnu.Menu_Report, UI = bl.menu.mnu.Menu_P_S_S_D, Name = bl.menu.mnu.Menu_Name_P_S_S_D, Url = "/PCPMS/Report/PSSD/Index"},
-            new bl.menu.mnu.Menu{ MenuListUI = bl.menu.mnu.Menu_Report, UI = bl.menu.mnu.Menu_S_A_S_P, Name = bl.menu.mnu.Menu_Name_S_A_S_P, Url = "/PCPMS/Report/SASP/Index"},
             new bl.menu.mnu.Menu{ MenuListUI = bl.menu.mnu.Menu_Report, UI = bl.menu.mnu.Menu_P_S_C_S_B, Name = bl.menu.mnu.Menu_Name_P_S_C_S_B, Url = "/PCPMS/Report/PSCSB/Index"},
+            new bl.menu.mnu.Menu{ MenuListUI = bl.menu.mnu.Menu_Report, UI = bl.menu.mnu.Menu_S_A_S_P, Name = bl.menu.mnu.Menu_Name_S_A_S_P, Url = "/PCPMS/Report/SASP/Index"},
+
      
             /// one Menu
             new bl.menu.mnu.Menu{ UI = bl.menu.mnu.Menu_Dashboard, Name = bl.menu.mnu.Menu_Name_Dashboard, Url = "/PCPMS/Dashboard/Index"},

@@ -190,6 +190,29 @@
             return ret.data;
         }
 
+        // -- Example: Report for products in a specific category with stock below a certain threshold
+        public static async Task<List<bl.report.PSCSB>> RPSCSBExecuteQueryAsync(Guid CategoryID, int stock)
+        {
+            string RPSCSBEsql = $@"
+                SELECT 
+                    c.CategoriesName AS CategoryName
+                    ,m.ManufatureName AS ProductName
+                    ,m.Stock
+                FROM pcpms_manufature m
+                JOIN pcpms_categories c ON m.CategoryID = c.Id
+                WHERE  m.Stock < {stock}  
+                {(CategoryID != Guid.Empty ? $"AND m.CategoriesName  = '{CategoryID}'" : "")}
+                ORDER BY m.ManufatureName";
 
+            var ret = await bl.DBaccess.RawSqlQueryAsync(RPSCSBEsql, x => new bl.report.PSCSB
+            {
+                CategoryName = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
+                ManufacturerName = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
+                Stock = (x[2] == DBNull.Value) ? 0 : (int)x[2]
+            });
+
+            return ret.data;
+
+        }
     }
 }

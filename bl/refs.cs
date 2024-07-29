@@ -34,6 +34,7 @@
         //// Report  Name
         public const string PSC = "Products Specific Category"; ////Report for products in a specific category with additional details
         public const string PSSD = "Products Sold Specific"; ////  Report for products sold in a specific date range
+        public const string PSCSB = "Products Specific Category With Stock Below"; //// Example: Report for products in a specific category with stock below a certain threshold
 
         // 
         public static string Report_Status_Pending = "Pending";
