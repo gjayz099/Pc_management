@@ -34,6 +34,23 @@
 
         }
 
+
+        public static async Task<List<bl.model.Manufacturies.ManufacturiesWithCategories>> GetAllManuAsync()
+        {
+            var ret = await bl.data.Manufaturies.ExecuteQueryAsync();
+
+            // Group the data by ManufactureName
+            var groupedData = from rets in ret.data
+                              select new bl.model.Manufacturies.ManufacturiesWithCategories
+                              {
+                                  ManufactureName =  rets.ManufactureName +" "+ rets.Specification,
+                              };
+
+            // Return the grouped data as a list
+            return groupedData.ToList();
+
+        }
+
         public static async Task<bl.dto.Manufacturies> GetIDAsync(Guid? id)
         {
             // Fetch manufacturing details using ExecuteQueryIDAsync method

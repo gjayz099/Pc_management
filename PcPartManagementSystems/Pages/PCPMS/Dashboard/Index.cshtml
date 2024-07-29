@@ -71,6 +71,17 @@
         <!-- /.row -->
      
     </div><!--/. container-fluid -->
+    <div class="container-fluid pb-3">
+        <div class="row m-auto">
+            <div class="col-10 m-auto">
+                <canvas id="salesChart" width="400" height="200" class="border-1"></canvas>
+            </div>
+
+        </div>
+       
+
+    </div>
+
 </section>
 
 @section Scripts {
@@ -82,7 +93,79 @@
             GetDataInCountjax('?handler=CountCus', '#info-box-number-Cus')
 
             GetDataInCountjax('?handler=CountManu', '#info-box-number-Manu')
+
+
+
+            function fetchData() {
+                return $.ajax({
+                    url: '?handler=DisplayData',
+                    method: 'GET',
+                    dataType: 'json'  // Specify that we expect JSON data
+                });
+            }
+
+            function prepareChartData(data) {
+                // Extract categories and total sales
+                const categories = [...new Set(data.map(item => item.category))];
+                const totalSalesPerCategory = categories.map(cat => {
+                    return data
+                        .filter(item => item.category === cat)
+                        .reduce((sum, item) => sum + item.totalPrice, 0);
+                });
+
+                return {
+                    labels: categories,
+                    datasets: [{
+                        label: 'Total Sales per Category',
+                        data: totalSalesPerCategory,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(255, 159, 64, 0.2)',
+                            'rgba(255, 205, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(153, 102, 255, 0.2)',
+                            'rgba(201, 203, 207, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgb(255, 99, 132)',
+                            'rgb(255, 159, 64)',
+                            'rgb(255, 205, 86)',
+                            'rgb(75, 192, 192)',
+                            'rgb(54, 162, 235)',
+                            'rgb(153, 102, 255)',
+                            'rgb(201, 203, 207)'
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+            }
+
+            function renderChart(chartData) {
+                const ctx = document.getElementById('salesChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
+            fetchData().done(function (data) {
+                const chartData = prepareChartData(data);
+                renderChart(chartData);
+            }).fail(function (jqXHR, textStatus, errorThrown) {
+                console.error('Error fetching data:', textStatus, errorThrown);
+            });
         })
+
     </script>
+
+
 
 }

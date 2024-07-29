@@ -39,6 +39,10 @@
             return (false, "Success", ret);
         }
 
+
+
+
+
         public static async Task<bl.dto.Manufacturies> ExecuteQueryIDAsync(Guid? id)
         {
                     string sqlwhereID = $@"

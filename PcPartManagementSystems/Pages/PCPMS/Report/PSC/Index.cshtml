@@ -18,6 +18,7 @@
                     <h5 class="modal-title">Filter report</h5>
                 </div>
                 <div class="modal-body">
+                    <label>Category</label>
                     <select id="filter" name="Filter" class="form-control" asp-for="Filter">
                         <option value="">All</option>
                         @foreach (var category in Model.cat)

@@ -165,9 +165,9 @@ namespace bl.data
                     DECLARE @EndDate DATETIME = '{endDate}'; -- Set your end date
 
                     SELECT
-                        m.ManufatureName AS ProductName,
-                        SUM(s.Quantity_Sold) AS TotalQuantitySold,
-                        SUM(s.Total_Price) AS TotalSalesAmount
+                        m.ManufatureName AS ProductName
+                        ,SUM(s.Quantity_Sold) AS TotalQuantitySold
+                        ,SUM(s.Total_Price) AS TotalSalesAmount
                     FROM
                         pcpms_sale s
                     JOIN
@@ -195,11 +195,53 @@ namespace bl.data
 
 
 
+        public static async Task<List<bl.report.SSDR>> SSDRExecuteQueryAsync(DateTime startDate, DateTime endDate, string ManufatureName)
+        {
+
+            string SSDREsql = $@"
+
+                DECLARE @StartDate DATETIME = '{startDate}'; -- Set your start date
+                DECLARE @EndDate DATETIME = '{endDate}'; -- Set your end date
+
+                SELECT 
+	                Concat(c.Firstname, ' ', c.Lastname )
+                    ,Concat( m.ManufatureName, ' ', m.Specification)
+                    ,s.Quantity_Sold
+                    ,s.UnitPrice
+                    ,s.Total_Price
+                    ,s.Date_sale
+                FROM 
+                    pcpms_sale s
+                JOIN 
+                    pcpms_customer c ON s.CustomerId = c.Id
+                JOIN 
+                    pcpms_manufature m ON s.PartID = m.Id
+                WHERE 
+                    s.Date_sale BETWEEN @StartDate AND @EndDate";
+
+            // Add additional condition if needed
+            if (ManufatureName != "ALL")
+            {
+                SSDREsql += $" AND CONCAT(m.ManufatureName, ' ', m.Specification) = '{ManufatureName}'";
+            }
+
+            // Add ordering
+            SSDREsql += " ORDER BY s.Date_sale DESC";
+
+            var ret = await bl.DBaccess.RawSqlQueryAsync(SSDREsql, x => new bl.report.SSDR
+            {
+                FullName = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
+                Manufacturer = (x[1] == DBNull.Value) ? string.Empty : (string)x[1],
+                TotalQuantitySold = (x[2] == DBNull.Value) ? 0 : (int)x[2],
+                UnitPrice = (x[3] == DBNull.Value) ? 0 : (decimal)x[3],
+                Totalprice = (x[4] == DBNull.Value) ? 0 : (decimal)x[4],
+                DateSale = (x[5] == DBNull.Value) ? DateTime.MinValue : (DateTime)x[5],
+
+            });
 
 
-
-
-
+            return ret.data;
+        }
     }
 
 

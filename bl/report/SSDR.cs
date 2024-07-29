@@ -1,49 +1,53 @@
 ﻿using OfficeOpenXml.Style;
 using OfficeOpenXml;
 using System.Drawing;
+using System;
 
 namespace bl.report
 {
-    public class PSCSB
+    public class SSDR
     {
-        public string CategoryName { get; set; }
-        public string ManufacturerName { get; set; }
-        public int Stock {  get; set; }
+        public string FullName {  get; set; }
+        public string Manufacturer { get; set; }
+        public int TotalQuantitySold { get; set; }
+        public decimal UnitPrice { get; set; }
+        public decimal Totalprice { get; set; }
+        public DateTime DateSale { get; set; }
 
-        public static async Task<string> CreateGenerateReport(Guid CategoryID, string Stock, Guid user)
+
+        public static async Task<string> CreateGenerateReport(DateTime startDate, DateTime endDate, string ManuFacture, Guid user)
         {
-      
-            if (!int.TryParse(Stock, out int stock)) return "Stock Is Zero";
+            if (startDate > endDate) return "The start date cannot be later than the end date.";
+            if (startDate == endDate) return "The start date cannot be the same as the end date.";
+            if (endDate > DateTime.Now) return "The end date cannot be in the future.";
 
-            var pscsbList = await bl.data.Manufaturies.RPSCSBExecuteQueryAsync(CategoryID, stock);
 
+            var ssdrList = await bl.data.Sales.SSDRExecuteQueryAsync(startDate, endDate, ManuFacture);
 
             // Initialize the report
             var report = new bl.dto.Report
             {
                 UserGenerateReport = user,
-                NameFileGenerateReport = bl.refs.PSCSB,
+                NameFileGenerateReport = bl.refs.SSDR,
                 DateGenerateReport = DateTime.Now,
                 PDF = false,
                 XMLS = true,
                 CSV = false,
-                ReportNotEmpty = pscsbList.Count > 0 ? "Not Empty" : "Empty"
+                ReportNotEmpty = ssdrList.Count > 0 ? "Not Empty" : "Empty"
             };
 
             // Check if the CategoryID is valid
-            if (CategoryID != Guid.Empty)
+            if (!string.IsNullOrEmpty(ManuFacture))
             {
-                var catId = await bl.data.Categories.CheckCategoriesId(CategoryID);
 
-                report.filter = $"{catId.CategoryName}<br>{Stock}";
+                report.filter = $"{startDate:yyyy-MM-dd}<br>{endDate:yyyy-MM-dd}<br>{ManuFacture}"; // Ensure the date format is consistent
 
             }
             else
             {
                 // Handle the case where CategoryID is not found
-                report.filter = $"ALL<br>{Stock}";
+                report.filter = $"{startDate:yyyy-MM-dd}<br>{endDate:yyyy-MM-dd}<br>ALL";
             }
-
             // Insert the report entry into the database
             await bl.data.Report.InsertDataAsync(report);
 
@@ -70,45 +74,12 @@ namespace bl.report
             return "";
         }
 
-
-        // Method to get Field ID values based on Category Name
-        public static async Task<string> GetFieldIDValues(string CategoryName)
+        public static async Task<List<bl.report.SSDR>> GetallSaleDateAndManu(DateTime startDate, DateTime endDate, string ManuFacture)
         {
-            // Retrieve category data
-            var data = await bl.data.Categories.ExecuteQueryAsync();
-
-            // Find and return the ID of the specified category
-            var FieldIDValues = data.Where(x => x.CategoryName == CategoryName)
-                                    .Select(x => x.Id)
-                                    .FirstOrDefault()
-                                    .ToString();
-
-            return FieldIDValues;
-        }
-
-        // Method to get Field Name values based on Category Name
-        public static async Task<string> GetFieldNameValues(string CategoryName)
-        {
-            // Retrieve category data
-            var data = await bl.data.Categories.ExecuteQueryAsync();
-
-            var fieldNameValue = data.Where(x => x.CategoryName == CategoryName)
-                                    .Select(x => x.CategoryName)
-                                    .FirstOrDefault();
-            return fieldNameValue ?? "ALL";
-        }
-
-
-        // Method to get all sale item IDs based on category name
-        public static async Task<List<bl.report.PSCSB>> GetallCatWithStockProductDate(Guid categoryName, int stock)
-        {
-            var data = await bl.data.Manufaturies.RPSCSBExecuteQueryAsync(categoryName, stock);
+            var data = await bl.data.Sales.SSDRExecuteQueryAsync(startDate, endDate, ManuFacture);
 
             return data;
         }
-
-
-
         public static string[] RemoveFilterBrFromArray(string[] reportFilters)
         {
             // Create a new array to hold the cleaned strings
@@ -123,6 +94,7 @@ namespace bl.report
             // Split the single string into multiple parts
             return cleanedFilters[0].Split('|');
         }
+
 
         // Method to create a report for download based on the report ID
         public static async Task<Byte[]> CraeteToDownlodReport(Guid id)
@@ -142,45 +114,41 @@ namespace bl.report
         }
 
 
-        private static async Task<List<bl.report.PSCSB>> FormatData(bl.model.Report report)
+        private static async Task<List<bl.report.SSDR>> FormatData(bl.model.Report report)
         {
             var filtersArray = new string[] { report.filter };
 
 
-            // Remove <br> tags from the array of filters
             var cleanedFilterArray = RemoveFilterBrFromArray(filtersArray);
 
-            var category = cleanedFilterArray[0];
-            var stockString = cleanedFilterArray[1];
+            DateTime startDate;
+            DateTime endDate;
 
-            // Retrieve the category GUID from the filter
-            var reportFilter = await GetFieldIDValues(category);
+            DateTime.TryParse(cleanedFilterArray[0], out startDate);
+            DateTime.TryParse(cleanedFilterArray[1], out endDate);
+            string manu = cleanedFilterArray[2];
 
-            Guid.TryParse(reportFilter, out var categoryGuid);
-            int.TryParse(stockString, out int stock);
-
-
-
-            var pssdList = await GetallCatWithStockProductDate(categoryGuid, stock);
+            var pssdList = await GetallSaleDateAndManu(startDate, endDate, manu);
 
             return pssdList;
-
         }
 
-        private static async Task<Byte[]> generateXLS(List<bl.report.PSCSB> reportdata, bl.model.Report report)
+        private static async Task<Byte[]> generateXLS(List<bl.report.SSDR> reportdata, bl.model.Report report)
         {
             ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 
             var filtersArray = new string[] { report.filter };
 
+
             // Remove <br> tags from the array of filters
             var cleanedFilterArray = RemoveFilterBrFromArray(filtersArray);
 
             // Since cleanedFilterArray contains one element, get that element
-            var Category = cleanedFilterArray[0];
-            var Stock = cleanedFilterArray[1];
+            DateTime startDate = Convert.ToDateTime(cleanedFilterArray[0]);
+            DateTime endDate = Convert.ToDateTime(cleanedFilterArray[1]);
+            string manu = cleanedFilterArray[2];
 
-            var reportFilter = await GetFieldNameValues(Category);
+
 
             // Retrieve user details based on the user ID from the report
             var user = await bl.data.User.CheackUserIDHave(report.UserGenerateReport);
@@ -189,44 +157,67 @@ namespace bl.report
             using (var package = new ExcelPackage())
             {
                 // Add a new worksheet to the Excel package
-                var ws = package.Workbook.Worksheets.Add(bl.refs.PSC);
+                var ws = package.Workbook.Worksheets.Add(bl.refs.SSDR);
 
-                SetReportHeader(ws, $"A1", "Products Category With Stock Below");
-                SetReportHeader(ws, $"A2", "Category");
-                SetReportHeader(ws, $"B2", reportFilter+ " & " + Stock);
-                SetReportHeader(ws, $"A3", "Generated User");
-                SetReportHeader(ws, $"B3", user.Username);
-                SetReportHeader(ws, $"A4", "Generated Date");
-                SetReportHeader(ws, $"B4", DateTime.Now.ToString("MM/dd/yyyy"));
+                SetReportHeader(ws, $"A1", "Report Sold Specific Date Range");
+                SetReportHeader(ws, $"A2", "DateTime");
+                SetReportHeader(ws, $"B2", $"{startDate:yyyy-MM-dd} TO {endDate:yyyy-MM-dd}");
+                SetReportHeader(ws, $"A3", "MAnufacture");
+                SetReportHeader(ws, $"B3", $"{manu}");
+                SetReportHeader(ws, $"A4", "Generated User");
+                SetReportHeader(ws, $"B4", user.Username);
+                SetReportHeader(ws, $"A5", "Generated Date");
+                SetReportHeader(ws, $"B5", DateTime.Now.ToString("MM/dd/yyyy"));
 
                 // Merge cells for the column headers
-                int colHeader = 5;
+                int colHeader = 6;
                 ws.Cells[$"A{colHeader}:A{colHeader + 2}"].Merge = true;
                 ws.Cells[$"B{colHeader}:B{colHeader + 2}"].Merge = true;
                 ws.Cells[$"C{colHeader}:C{colHeader + 2}"].Merge = true;
-                SetBorder(ws.Cells[$"A{colHeader}:C{colHeader + 2}"]);
+                ws.Cells[$"D{colHeader}:D{colHeader + 2}"].Merge = true;
+                ws.Cells[$"E{colHeader}:E{colHeader + 2}"].Merge = true;
+                ws.Cells[$"F{colHeader}:F{colHeader + 2}"].Merge = true;
+                SetBorder(ws.Cells[$"A{colHeader}:F{colHeader + 2}"]);
 
 
-                SetColumnHeader(ws, $"A{colHeader}", "Categories Name", Color.Aqua);
-                SetColumnHeader(ws, $"B{colHeader}", "Manufacturer Name", Color.Aqua);
-                SetColumnHeader(ws, $"C{colHeader}", "Stock", Color.Aqua);
+                SetColumnHeader(ws, $"A{colHeader}", "FullName", Color.Aqua);
+                SetColumnHeader(ws, $"B{colHeader}", "Manufacture", Color.Aqua);
+                SetColumnHeader(ws, $"C{colHeader}", "Total QTY Sold", Color.Aqua);
+                SetColumnHeader(ws, $"D{colHeader}", "Unit Price", Color.Aqua);
+                SetColumnHeader(ws, $"E{colHeader}", "Total Price", Color.Aqua);
+                SetColumnHeader(ws, $"F{colHeader}", "Date Sale", Color.Aqua);
 
                 // Populate worksheet with report data
-                int startRow = 8;
+                int startRow = 9;
                 foreach (var row in reportdata)
                 {
-                    ws.Cells[startRow, 1].Value = row.CategoryName;
+                    ws.Cells[startRow, 1].Value = row.FullName;
                     ws.Cells[startRow, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    ws.Cells[startRow, 2].Value = row.ManufacturerName;
+                    ws.Cells[startRow, 2].Value = row.Manufacturer;
                     ws.Cells[startRow, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
-                    ws.Cells[startRow, 3].Value = row.Stock;
+                    ws.Cells[startRow, 3].Value = row.TotalQuantitySold;
+                    ws.Cells[startRow, 3].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+                    ws.Cells[startRow, 4].Value = row.UnitPrice == null ? "" : ((decimal)row.UnitPrice).ToString("N2");
+                    ws.Cells[startRow, 4].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    ws.Cells[startRow, 5].Value = row.Totalprice == null ? "" : ((decimal)row.Totalprice).ToString("N2");
+                    ws.Cells[startRow, 5].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
+                    ws.Cells[startRow, 6].Value = row.DateSale == null ? "" : ((DateTime)row.DateSale).ToString("mm/dd/yyyy");
+                    ws.Cells[startRow, 6].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+
                     startRow++;
                 }
 
                 // Set column widths
-                ws.Column(1).Width = 35;
-                ws.Column(2).Width = 18;
-                ws.Column(3).Width = 18;
+                ws.Column(1).Width = 30;
+                ws.Column(2).Width = 55;
+                ws.Column(3).Width = 21;
+                ws.Column(4).Width = 21;
+                ws.Column(5).Width = 21;
+                ws.Column(6).Width = 21;
+
                 // Save and return the Excel file as a byte array
                 byte[] xls = package.GetAsByteArray();
                 return xls;

@@ -66,7 +66,7 @@ namespace bl.report
 
 
 
-        // Method to get all sale item IDs based on category name
+
         public static async Task<List<bl.report.PSSD>> GetallSaleProductDate(DateTime startDate, DateTime endDate)
         {
             var data = await bl.data.Sales.PSSDExecuteQueryAsync(startDate, endDate);
@@ -127,9 +127,6 @@ namespace bl.report
             var pssdList = await GetallSaleProductDate(startDate, endDate);
 
             return pssdList;
-
-
-
         }
 
 
@@ -159,7 +156,6 @@ namespace bl.report
                 var ws = package.Workbook.Worksheets.Add(bl.refs.PSSD);
 
                 SetReportHeader(ws, $"A1", "Report Sold Specific Date Range");
-
                 SetReportHeader(ws, $"A2", "DateTime");
                 SetReportHeader(ws, "B2", $"{startDate:yyyy-MM-dd} TO {endDate:yyyy-MM-dd}");
                 SetReportHeader(ws, $"A3", "Generated User");

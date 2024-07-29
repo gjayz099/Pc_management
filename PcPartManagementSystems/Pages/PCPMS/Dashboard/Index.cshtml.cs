@@ -9,6 +9,8 @@ namespace PcPartManagementSystems.Pages.PCPMS.Dashboard
         [BindProperty] public decimal TotalPrice { get; set; }
         [BindProperty] public int CountCus { get; set; }
         [BindProperty] public int CountManu { get; set; }
+        [BindProperty] public List<bl.model.Sales.SaleWithCustomer> ret { get; set; }
+
         public IActionResult OnGet()
         {
       
@@ -41,6 +43,13 @@ namespace PcPartManagementSystems.Pages.PCPMS.Dashboard
 
             return new JsonResult(TotalPrice);
         }
-        
+
+        public async Task<IActionResult> OnGetDisplayData()
+        {
+            ret = await bl.model.Sales.GetAllAsync();
+
+            return new JsonResult(ret);
+        }
+
     }
 }
