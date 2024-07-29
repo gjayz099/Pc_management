@@ -157,7 +157,7 @@
         }
 
         //-- Example: Report for products in a specific category with additional details
-        public static async Task<List<bl.report.PSC>> RCSExecuteQueryAsync(string catName = null)
+        public static async Task<List<bl.report.PSC>> RCSExecuteQueryAsync(Guid CategoryID)
         {
 
             string RPSsql = $@"
@@ -169,14 +169,12 @@
                     ,m.Specification
                     ,ISNULL(m.Description, '')
                 FROM pcpms_manufature m
-                JOIN pcpms_categories c ON m.CategoryID = c.Id";
-
-
+                JOIN pcpms_categories c ON m.CategoryID = c.Id
+                {(CategoryID != Guid.Empty ? $" WHERE m.CategoryID = '{CategoryID}'" : "")}";
   
-            if (!string.IsNullOrEmpty(catName))
-            {
-                RPSsql += $" WHERE c.CategoriesName = '{catName}'";
-            }
+
+
+          
 
             var ret = await bl.DBaccess.RawSqlQueryAsync(RPSsql, x => new bl.report.PSC
             {

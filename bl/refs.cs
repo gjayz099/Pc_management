@@ -31,9 +31,9 @@
         public const string Pending_Success = "Success";
 
 
-        //// Report 
-        /// PSC
-        public const string PSC = "Report_For_Products_In_A_Specific_Category";
+        //// Report  Name
+        public const string PSC = "Products Specific Category"; ////Report for products in a specific category with additional details
+        public const string PSSD = "Products Sold Specific"; ////  Report for products sold in a specific date range
 
         // 
         public static string Report_Status_Pending = "Pending";

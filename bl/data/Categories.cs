@@ -70,20 +70,49 @@
 
 
 
-        public static async Task<List<model.Categories>> CheckCategories(Guid branchID)
+        public static async Task<List<model.Categories>> CheckCategories(Guid CategoryID)
         {
             string sqlQuery = $@"
-                CategoriesName
+                Id
+                ,CategoriesName
                 FROM {bl.refs.Databse_DB}.dbo.pcpms_categories
-                where Id = @branchID";
+                where Id = @CategoryID";
 
             var par = new List<Microsoft.Data.SqlClient.SqlParameter>
             {
-                new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@branchID", Value = branchID }
+                new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@CategoryID", Value = CategoryID }
             };
 
 
             var ret = await bl.DBaccess.RawSqlQueryAsync(sqlQuery, par, x => new bl.model.Categories
+            {
+                // Maps the first column (Id) to Category.Id and handles DBNull values
+                Id = (x[0] == DBNull.Value) ? Guid.Empty : (Guid)x[0],
+                // Maps the second column (CategoiesName) to Category.CategoryName and handles DBNull values
+                CategoryName = (x[1] == DBNull.Value) ? string.Empty : (string)x[1]
+            });
+
+
+            return ret.data;
+        }
+
+
+        public static async Task<model.Categories> CheckCategoriesId(Guid CategoryID)
+        {
+            string sqlQuery = $@"
+                SELECT
+                Id
+                ,CategoriesName
+                FROM {bl.refs.Databse_DB}.dbo.pcpms_categories
+                where Id = @CategoryID";
+
+            var par = new List<Microsoft.Data.SqlClient.SqlParameter>
+            {
+                new Microsoft.Data.SqlClient.SqlParameter { ParameterName = "@CategoryID", Value = CategoryID }
+            };
+
+
+            var ret = await bl.DBaccess.RawSqlQuerySingleAsync(sqlQuery, par, x => new bl.model.Categories
             {
                 // Maps the first column (Id) to Category.Id and handles DBNull values
                 Id = (x[0] == DBNull.Value) ? Guid.Empty : (Guid)x[0],

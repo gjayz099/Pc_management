@@ -53,11 +53,10 @@
                         ,rt.Status
                         ,rt.ReportNotEmpty
                         FROM {bl.refs.Databse_DB}.dbo.pcpms_report rt
-                        WHERE rt.NameFileGenerateReport = @NameFileGenerateReport AND rt.Status = @Status";
+                        WHERE rt.Status = @Status";
 
             var par = new List<Microsoft.Data.SqlClient.SqlParameter>
             {
-                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@NameFileGenerateReport", Value = bl.refs.PSC},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Status", Value = bl.refs.Report_Status_Pending}
             };
 
@@ -93,11 +92,10 @@
                         ,rt.Status
                         ,rt.ReportNotEmpty
                         FROM {bl.refs.Databse_DB}.dbo.pcpms_report rt
-                        WHERE rt.NameFileGenerateReport = @NameFileGenerateReport AND rt.Status = @Status";
+                        WHERE  rt.Status = @Status";
 
             var par = new List<Microsoft.Data.SqlClient.SqlParameter>
             {
-                new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@NameFileGenerateReport", Value = bl.refs.PSC},
                 new Microsoft.Data.SqlClient.SqlParameter{ ParameterName = "@Status", Value = bl.refs.Report_Status_Succes }
             };
 

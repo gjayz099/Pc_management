@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Syncfusion.XlsIO.Implementation.PivotAnalysis;
+using System;
 using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace bl.data
 {
@@ -106,8 +108,7 @@ namespace bl.data
         public static async Task<List<bl.report.PSC>> RPSExecuteQueryAsync(DateTime startDate, DateTime endDate, string categoryName = null)
         {
 
-            string RPSsql = $@"
-                            SELECT 
+            string RPSsql = $@"SELECT 
                                 s.Id AS SaleId,
                                 c.Firstname AS CustomerFirstName,
                                 c.Lastname AS CustomerLastName,
@@ -154,6 +155,50 @@ namespace bl.data
 
             return ret.data;
         }
+        //-- Example: Report for products sold in a specific date range
+        public static async Task<List<bl.report.PSSD>> PSSDExecuteQueryAsync(DateTime startDate, DateTime endDate)
+        {
+
+     
+            string RPSsql = $@"
+                    DECLARE @StartDate DATETIME = '{startDate}'; -- Set your start date
+                    DECLARE @EndDate DATETIME = '{endDate}'; -- Set your end date
+
+                    SELECT
+                        m.ManufatureName AS ProductName,
+                        SUM(s.Quantity_Sold) AS TotalQuantitySold,
+                        SUM(s.Total_Price) AS TotalSalesAmount
+                    FROM
+                        pcpms_sale s
+                    JOIN
+                        pcpms_manufature m ON s.PartID = m.Id
+                    WHERE
+                        s.Date_sale BETWEEN @StartDate AND @EndDate
+                    GROUP BY
+                        m.ManufatureName
+                    ORDER BY
+                        TotalSalesAmount DESC";
+
+
+
+            var ret = await bl.DBaccess.RawSqlQueryAsync(RPSsql, x => new bl.report.PSSD
+            {
+
+                ManufatureName = (x[0] == DBNull.Value) ? string.Empty : (string)x[0],
+                TotalQuantitySold = (x[1] == DBNull.Value) ? 0 : (int)x[1],
+                TotalSalesAmount = (x[2] == DBNull.Value) ? 0 : (decimal)x[2],
+            });
+
+            return ret.data;
+        }
+
+
+
+
+
+
+
+
 
     }
 

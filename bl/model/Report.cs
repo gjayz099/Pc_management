@@ -24,7 +24,6 @@
             public bool XMLS { get; set; }
             public bool CSV { get; set; }
             public string filter { get; set; }
-
             public string Status { get; set; } // Pending / Success
             public string ReportEmty { get; set; }
         }
@@ -36,11 +35,12 @@
             return ret.data;
         }
 
-        public static async Task<List<bl.model.Report.ReportDataUserCat>> GetPSSuccessCAllSuccessAsync()
+        public static async Task<List<bl.model.Report.ReportDataUserCat>> GetSuccessPSCAllAsync(string name)
         {
             var ret = await bl.data.Report.ExecuteSuccessQueryNameAsync();
 
             var query = from rets in ret
+                        where rets.NameFileGenerateReport == name
                         select new ReportDataUserCat
                         {
 
@@ -51,7 +51,8 @@
                             XMLS = rets.XMLS,
                             CSV = rets.CSV,
                             Status = rets.Status,
-                            filter = rets.filter 
+                            filter = rets.filter,
+                            ReportEmty = rets.ReportEmty
                         };
     
 
@@ -59,11 +60,12 @@
         }
 
 
-        public static async Task<List<bl.model.Report.ReportDataUserCat>> GetPendingPSCAllSuccessAsync()
+        public static async Task<List<bl.model.Report.ReportDataUserCat>> GetPendingPSCAllAsync(string name)
         {
             var ret = await bl.data.Report.ExecutePindingQueryNameAsync();
 
             var query = from rets in ret
+                        where rets.NameFileGenerateReport == name
                         select new ReportDataUserCat
                         {
 
@@ -74,7 +76,8 @@
                             XMLS = rets.XMLS,
                             CSV = rets.CSV,
                             Status = rets.Status,
-                            filter = rets.filter 
+                            filter = rets.filter,
+                            ReportEmty = rets.ReportEmty
                         };
 
 

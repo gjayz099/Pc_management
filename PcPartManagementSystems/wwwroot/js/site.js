@@ -56,6 +56,27 @@ $(document).ready(function () {
 
 
 
+function formatFilterDates(filter) {
+    // Replace escaped <br> (\u003Cbr\u003E) with a delimiter and split the string
+    var dates = filter.replace(/\u003Cbr\u003E/g, '|').split('|');
+
+    // Parse and format dates with index
+    var formattedDates = dates.map(function (itemStr, index) {
+        var trimmedStr = itemStr.trim(); // Trim any extra spaces
+        var date = new Date(itemStr); // Use the whole string as the date input
+        if (!isNaN(date.getTime()) && trimmedStr.length > 0) { // Check if the date is valid
+            // Return formatted date with index
+            return dateWithoutTime(date);
+        } else {
+            return "Null";
+        }
+   
+    });
+
+    // Join formatted dates with <br> for HTML line breaks
+    return formattedDates.join(' <br> ');
+}
+
 // Function to update total price display
 function updateTotalPrice() {
     var totalPrice = 0;
