@@ -73,13 +73,21 @@
     </div><!--/. container-fluid -->
     <div class="container-fluid pb-3">
         <div class="row m-auto">
-            <div class="col-10 m-auto">
-                <canvas id="salesChart" width="400" height="200" class="border-1"></canvas>
+            <div class="col-6 m-auto">
+                <div class="mx-2 p-2 card">
+                    <canvas id="salesChart"class="border-1"></canvas>
+                </div>
             </div>
-
+      
+            <div class="col-6 m-auto">
+                <div class="mx-2 p-2 card">
+                    <canvas id="salesChartDate"  class="border-1"></canvas>
+                </div>
+            </div>
         </div>
        
 
+     
     </div>
 
 </section>
@@ -105,7 +113,6 @@
             }
 
             function prepareChartData(data) {
-                // Extract categories and total sales
                 const categories = [...new Set(data.map(item => item.category))];
                 const totalSalesPerCategory = categories.map(cat => {
                     return data
@@ -141,7 +148,7 @@
                 };
             }
 
-            function renderChart(chartData) {
+            function renderSalesChart(chartData) {
                 const ctx = document.getElementById('salesChart').getContext('2d');
                 new Chart(ctx, {
                     type: 'bar',
@@ -156,12 +163,55 @@
                 });
             }
 
+            function prepareChartDateData(data) {
+                const dates = [...new Set(data.map(item => new Date(item.dateSale).toDateString()))];
+                const totalSalesPerDate = dates.map(date => {
+                    return data
+                        .filter(item => new Date(item.dateSale).toDateString() === date)
+                        .reduce((sum, item) => sum + item.totalPrice, 0);
+                });
+
+                return {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Total Sales per Date',
+                        data: totalSalesPerDate,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                        ],
+                        borderColor: [
+                            'rgb(75, 192, 192)',
+                        ],
+                        borderWidth: 1
+                    }]
+                };
+            }
+
+            function renderSalesDateChart(chartDataDate) {
+                const ctx = document.getElementById('salesChartDate').getContext('2d');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: chartDataDate,
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
+
             fetchData().done(function (data) {
                 const chartData = prepareChartData(data);
-                renderChart(chartData);
+                renderSalesChart(chartData);
+
+                const chartDataDate = prepareChartDateData(data);
+                renderSalesDateChart(chartDataDate);
             }).fail(function (jqXHR, textStatus, errorThrown) {
                 console.error('Error fetching data:', textStatus, errorThrown);
             });
+
         })
 
     </script>

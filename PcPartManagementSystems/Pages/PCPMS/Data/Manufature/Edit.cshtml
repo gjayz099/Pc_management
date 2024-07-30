@@ -59,7 +59,7 @@
                     {
                         <tr class="row">
                             <td class="form-group col-6">
-                                <img src="\img\@Model.dto?.PictureName" />
+                                <img src="/img/@Model.dto?.PictureName" alt="Image" style="width: 200px; height: 200px;" />
                             </td>
                         </tr>
                     }else{
@@ -85,7 +85,8 @@
     <script type="text/javascript">
 
         $(document).ready(function () {
-      
+
+
             // Initialize Select2
             $("#dropdownCategory").select2({
                 theme: 'bootstrap',

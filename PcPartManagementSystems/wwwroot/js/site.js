@@ -163,48 +163,7 @@ function GetDataInCountjax(url, value) {
     })
 }
 
-// Function to populate a Select2 dropdown from a URL
-function setSelect2ID(url, selector, selectedValue) {
-    // Make an AJAX request to fetch data from the specified URL
-    $.ajax({
-        url: url,
-        method: 'GET',
-        dataType: 'json', // Assuming data is returned as JSON
-        success: function (data) {
-            // Clear existing options in the dropdown
-            $(selector).empty();
 
-
-            // Add a placeholder option if no selected value is provided
-            if (!selectedValue) {
-                var placeholderOption = '<option  class="form-control" value="" disabled selected> ---Select--- </option>';
-                $(selector).append(placeholderOption);
-            }
-            // Populate dropdown with fetched data
-            $.each(data, function (index, item) {
-                // Create an option element for each item in the data
-                var option = '<option  class="form-control" value="' + item.id + '">' + item.text + '</option>';
-
-                // Check if selectedValue matches item.id and mark as selected
-                if (selectedValue != null && item.id === selectedValue) {
-                    option = '<option  class="form-control"  value="' + item.id + '" selected="selected">' + item.text + '</option>';
-                }
-
-                // Append the option to the dropdown
-                $(selector).append(option);
-            });
-
-
-     
-            // Trigger change event to update Select2 UI
-            $(selector).trigger('change');
-        },
-        error: function (xhr, status, error) {
-            console.error('Error fetching data:', error);
-            // Handle error scenario as needed
-        }
-    });
-}
 
 
 // Function to fetch and populate Select2 dropdown
@@ -254,7 +213,48 @@ function setSelect2ID(url, selector, selectedValue, selectme) {
     });
 }
 
+// Function to populate a Select2 dropdown from a URL
+function setSelect2ID(url, selector, selectedValue) {
+    // Make an AJAX request to fetch data from the specified URL
+    $.ajax({
+        url: url,
+        method: 'GET',
+        dataType: 'json', // Assuming data is returned as JSON
+        success: function (data) {
+            // Clear existing options in the dropdown
+            $(selector).empty();
 
+
+            // Add a placeholder option if no selected value is provided
+            if (!selectedValue) {
+                var placeholderOption = '<option  class="form-control" value="" disabled selected> ---Select--- </option>';
+                $(selector).append(placeholderOption);
+            }
+            // Populate dropdown with fetched data
+            $.each(data, function (index, item) {
+                // Create an option element for each item in the data
+                var option = '<option  class="form-control" value="' + item.id + '">' + item.text + '</option>';
+
+                // Check if selectedValue matches item.id and mark as selected
+                if (selectedValue != null && item.text === selectedValue) {
+                    option = '<option  class="form-control"  value="' + item.id + '" selected="selected">' + item.text + '</option>';
+                }
+
+                // Append the option to the dropdown
+                $(selector).append(option);
+            });
+
+
+
+            // Trigger change event to update Select2 UI
+            $(selector).trigger('change');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching data:', error);
+            // Handle error scenario as needed
+        }
+    });
+}
 
 
 
@@ -266,8 +266,9 @@ function setSelect2Name(url, selector, selectedValue) {
         method: 'GET',
         dataType: 'json',
         success: function (data) {
-            console.log('Data fetched:', data); // Log fetched data
+
             $(selector).empty();
+
             if (!selectedValue) {
                 var placeholderOption = '<option value="" disabled selected> ---Select--- </option>';
                 $(selector).append(placeholderOption);

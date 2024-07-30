@@ -47,12 +47,13 @@
         {
                     string sqlwhereID = $@"
                     SELECT
-                        ManufatureName,
-                        Specification,
-                        CategoryID,
-                        Price,
-                        Stock,
-                        Description
+                        ManufatureName
+                        ,Specification
+                        ,CategoryID
+                        ,Price
+                        ,Stock
+                        ,Description
+                        ,PictureName
                     FROM {bl.refs.Databse_DB}.dbo.pcpms_manufature
                     WHERE Id = @Id";
             var par = new List<Microsoft.Data.SqlClient.SqlParameter>
@@ -70,6 +71,7 @@
                 Price = (x[3] == DBNull.Value) ? 0 : (decimal)x[3],
                 Stock = (x[4] == DBNull.Value) ? 0 : (int)x[4],
                 Description = (x[5] == DBNull.Value) ? string.Empty : (string)x[5],
+                PictureName = (x[6] == DBNull.Value) ? string.Empty : (string)x[6],
      
             });
 
